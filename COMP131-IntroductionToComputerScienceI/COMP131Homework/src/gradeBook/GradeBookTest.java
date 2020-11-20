@@ -130,7 +130,7 @@ public class GradeBookTest {
         gradeBook3.setQuizScore(5, 75);
         gradeBook3.setQuizScore(6, 83);
 
-        assertEquals(true, gradeBook3.quizzesShowImprovement(3));
+        assertEquals(true, gradeBook3.hasShownQuizScoreImprovement(3));
     }
 
     @Test
@@ -144,7 +144,7 @@ public class GradeBookTest {
         gradeBook3.setQuizScore(5, 75);
         gradeBook3.setQuizScore(6, 83);
 
-        assertEquals(false, gradeBook3.quizzesShowImprovement(5));
+        assertEquals(false, gradeBook3.hasShownQuizScoreImprovement(5));
     }
 
     @Test

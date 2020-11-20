@@ -1,13 +1,14 @@
 package gradeBook;
 
 /**
- * The GradeBook class models the way an instructor might keep grades for a
- * student. A GradeBook will contain 2 arrays, one to hold the student's
- * homework scores and one to hold the student's quiz scores. Homework scores
- * and quiz scores are represented using integer values.
+ * The GradeBook class models the way an instructor might keep grades for a student. 
+ * A GradeBook will contain 2 arrays, one to hold the student's
+ * homework scores and one to hold the student's quiz scores. 
+ * 
+ * Homework scores and quiz scores are represented using integer values.
  * 
  * @author Xiang Wei
- * @version (12.11.13) 
+ * @version (12.11.13)
  */
 
 public class GradeBook {
@@ -64,7 +65,7 @@ public class GradeBook {
      * Sets the score for a particular homework assignment.
      * 
      * @param nthHomework the nth homework assignment
-     * @param score       the score to be set
+     * @param score       the homework score to be set
      */
 
     public void setHomeworkScore(int nthHomework, int score) {
@@ -74,19 +75,19 @@ public class GradeBook {
     /**
      * Sets the score for a particular quiz.
      * 
-     * @param numQuizzes the position of the quiz
-     * @param score      the score to be set
+     * @param nthQuiz the nth quiz
+     * @param score   the quiz score to be set
      */
 
-    public void setQuizScore(int numQuizzes, int score) {
-        quizzes[numQuizzes] = score;
+    public void setQuizScore(int nthQuiz, int score) {
+        quizzes[nthQuiz] = score;
     }
 
     /**
      * Returns the score for a particular homework assignment.
      * 
      * @param nthHomework the nth homework assignment
-     * @return the score of the homework
+     * @return the score of the nth homework
      */
 
     public int getHomeworkScore(int nthHomework) {
@@ -97,7 +98,7 @@ public class GradeBook {
      * Retrieves the score for a particular quiz.
      * 
      * @param quizNumber the position of the quiz
-     * @return the score of the quiz
+     * @return the score of the nth quiz
      */
 
     public int getQuizScore(int nthQuiz) {
@@ -107,9 +108,9 @@ public class GradeBook {
     /**
      * Returns an int value indicating the average of all of the homework scores.
      * 
-     * Any fractional part of the average is truncated.
+     * Decimals are truncated.
      * 
-     * @return average the average score of homework
+     * @return the average score of all homework assignments
      */
 
     public int getAverageHomeworkScore() {
@@ -124,7 +125,7 @@ public class GradeBook {
     /**
      * Returns an int value indicating the lowest homework score.
      * 
-     * @return min the lowest homework score
+     * @return the lowest homework score
      */
 
     public int getMinHomeworkScore() {
@@ -144,7 +145,7 @@ public class GradeBook {
      * there are ties for the highest homework score, this method returns the index
      * of the most recent homework with that score.
      * 
-     * @return the index of the homework with the highest score
+     * @return the index of the homework with the highest homework score
      */
 
     public int getIndexOfHighestHomeworkScore() {
@@ -168,9 +169,8 @@ public class GradeBook {
      * average by no more than the specified maximum allowable difference, and false
      * otherwise.
      * 
-     * @param allowableScoreDifference the allowable difference compare with average
-     *                                 score
-     * @return boolean
+     * @param allowableScoreDifference the allowable difference compare with average score
+     * @return whether the average homework score is within the specified score difference 
      */
 
     public boolean isHomeworkScoreConsistent(int allowableScoreDifference) {
@@ -178,11 +178,19 @@ public class GradeBook {
         int hwAverage = getAverageHomeworkScore();
 
         for (int hwScore : homeworks) {
-            if (!(Math.abs(hwScore - hwAverage) == allowableScoreDifference)) {
-                consistentHWScores = false;
+            if(hwScore > hwAverage) {
+                if (!((hwScore - hwAverage) == allowableScoreDifference)) {
+                    consistentHWScores = false;
+                }
             }
 
-            else {
+            else if (hwScore < hwAverage ) {
+                if (!((hwAverage - hwScore) == allowableScoreDifference)) {
+                    consistentHWScores = false;
+                }
+            }
+
+            else {// current homework score is the same as the average homework score
                 if (allowableScoreDifference == 0) {
                     consistentHWScores = true;
                 }
@@ -201,8 +209,7 @@ public class GradeBook {
      * homework and a quiz. If any homework score is equal to any quiz score this
      * method returns true, otherwise it returns false.
      * 
-     * @return boolean whether if there exists the same score for a homework
-     *         assingment and a quiz
+     * @return whether there exists the same score for a homework assingment and a quiz
      */
 
     public boolean hasDuplicateScore() {
@@ -221,7 +228,7 @@ public class GradeBook {
      * Returns an int value indicating the biggest positive difference in scores
      * between any two successive homework grades.
      * 
-     * @return jump the biggest jump
+     * @return the value indicating the biggest positive difference between any two succesive scores
      */
 
     public int findMaxConsecutiveHWScoreDifference() {
@@ -238,15 +245,13 @@ public class GradeBook {
     }
 
     /**
-     * This method checks to see if the student's quiz scores are improving towards
-     * the end.
+     * This method checks to see if the student's quiz scores are improving towards the end.
      * 
-     * @param targetNumQuizScoreImprovements the number of improvements in quiz
-     *                                       score
-     * @return boolean
+     * @param targetNumQuizScoreImprovements the number of improvements in quiz score
+     * @return whether the student has higher scores in later quizzes
      */
 
-    public boolean quizzesShowImprovement(int targetNumQuizScoreImprovements) {
+    public boolean hasShownQuizScoreImprovement(int targetNumQuizScoreImprovements) {
         boolean hasShownEnoughImprovement = false;
         int actualNumQuizScoreImprovements = 0;
 
@@ -267,7 +272,8 @@ public class GradeBook {
      * Returns true if there are more increases in the homework scores than there
      * are decreases and false otherwise.
      * 
-     * @return boolean
+     * @return whether there are more increased homework scores between consecutive homework assignments
+     * than that of decreased homework scores
      */
 
     public boolean hasMoreHWScoreIncreaseThanDecrease() {
