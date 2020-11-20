@@ -281,7 +281,7 @@ public class GradeBook {
             if (homeworks[i + 1] < homeworks[i]) {
                 numDecreases += 1;
             }
-        } 
+        }
 
         return numIncreases > numDecreases;
     }
