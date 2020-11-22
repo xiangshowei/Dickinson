@@ -8,17 +8,11 @@ import org.junit.Test;
 /**
  * The test class LibraryTest.
  *
- * @author  (your name)
- * @version (a version number or a date)
+ * @author Xiang Wei
+ * @version 11/20/2013
  */
-public class LibraryTest
-{
-    /**
-     * Default constructor for test class LibraryTest
-     */
-    public LibraryTest()
-    {
-    }
+public class LibraryTest {
+    
 
     /**
      * Sets up the test fixture.
@@ -26,8 +20,7 @@ public class LibraryTest
      * Called before every test case method.
      */
     @Before
-    public void setUp()
-    {
+    public void setUp() {
     }
 
     /**
@@ -36,8 +29,7 @@ public class LibraryTest
      * Called after every test case method.
      */
     @After
-    public void tearDown()
-    {
+    public void tearDown() {
     }
 
     @Test
@@ -50,7 +42,7 @@ public class LibraryTest
         assertEquals(1, library1.getNumBooks());
         library1.getBook("3456");
         assertEquals("Harry", library1.getLibraryName());
-        library1.deleteBookByAuthor("Harry");
+        library1.removeBookByAuthor("Harry");
         Book book2 = new Book("history", "Harry", "765", "history", 1995, 200);
         library1.addBook(book2);
         library1.addBook(book1);
@@ -116,14 +108,14 @@ public class LibraryTest
     public void testAAAAAAAA()
     {
         Library library1 = new Library("Harry");
-        library1.print();
+        library1.printLibraryInformation();
         Book book1 = new Book("Harry", "Harry", "Harry", "Harry", 1995, 1995);
         library1.addBook(book1);
-        library1.print();
-        assertEquals("Harry", library1.getSpecificCallNum("Harry"));
+        library1.printLibraryInformation();
+        assertEquals("Harry", library1.getCallNumByAuthor("Harry"));
         assertEquals(true, library1.hasBookByAuthor("Harry"));
-        library1.deleteBookByAuthor("Harry");
-        library1.deleteBookByAuthor("Harry");
+        library1.removeBookByAuthor("Harry");
+        library1.removeBookByAuthor("Harry");
     }
 }
 
