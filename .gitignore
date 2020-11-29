@@ -1,5 +1,7 @@
 .DS_Store
 
-.metadata
+.project
 
-.recommenders
+.settings
+
+.classpath
