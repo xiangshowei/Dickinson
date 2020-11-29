@@ -137,7 +137,7 @@ public class Book {
     /**
      * Mark the book as checked out. Display an error message if the book is already checked out.
      */
-    public void checkOutBook() {
+    public void markAsCheckedOut() {
         if (checkedOut) {
             System.out.println("Error: " + title + " is already checked out!");
         } 
@@ -147,10 +147,10 @@ public class Book {
     }
 
     /**
-     * Mark the book as NOT being checked out. Display an error message if the book
+     * Mark the book as available for checkout. Display an error message if the book
      * is not already checked out.
      */
-    public void returnBook() {
+    public void markAsAvaiable() {
         if (!checkedOut) {
             System.out.println("Error: " + title + " is not checked out!");
         } 

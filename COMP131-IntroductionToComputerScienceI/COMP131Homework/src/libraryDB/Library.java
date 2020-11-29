@@ -14,7 +14,8 @@ public class Library {
     private HashMap<String, Book> books;
     
     /**
-     * Create a new Library with the specified name and no books
+     * Create a new Library with the specified name and no books.
+     * Each book is uniquely identified via its call number.
      * 
      * @param initName name of the library
      */
@@ -69,8 +70,10 @@ public class Library {
      * @param author the author's name
      */
     public void removeBookByAuthor(String author) {
-        if (getCallNumByAuthor(author) != null) {
-            books.remove(getCallNumByAuthor(author));
+        Book bookByAuthor = getBookByAuthor(author);
+
+        if (bookByAuthor != null) {
+            books.remove(bookByAuthor.getCallNumber());
         } 
         else {
             System.out.println("Error: the library has no books by " + author);
@@ -84,14 +87,13 @@ public class Library {
      * @return whether the library has a book by the specified author
      */
     public boolean hasBookByAuthor(String author) {
-        return getCallNumByAuthor(author) != null;
+        return getBookByAuthor(author) != null;
     }
 
 
     /**
      * Check out the specified book, displaying an error message if the library does
-     * not have the book with the specified call number, 
-     * or if the book is already checked out.
+     * not have the book with the specified call number, or if the book is already checked out.
      * 
      * @param callNum the call number of the book to check out
      */
@@ -101,7 +103,7 @@ public class Library {
         }
 
         else {
-            books.get(callNum).checkOutBook();
+            books.get(callNum).markAsCheckedOut();
         }
 
     }
@@ -119,7 +121,7 @@ public class Library {
             System.out.println("no such book or the book is not checked out");
         }
         else {
-            books.get(callNum).returnBook();
+            books.get(callNum).markAsAvaiable();
         }   
     }
 
@@ -173,17 +175,19 @@ public class Library {
      * @param authorName the name of the author
      * @return callNumber by authorName
      */
-    protected String getCallNumByAuthor(String authorName) {
-        String callNumByAuthor = null;
+    private Book getBookByAuthor(String authorName) {
+        Book bookByAuthor = null;
         
         Set<String> allCallNumbers = books.keySet();
         for (String callNumber: allCallNumbers) {
             Book book = books.get(callNumber);
+           
             if (authorName.equals(book.getAuthor())) {
-                callNumByAuthor = book.getCallNumber();
+                bookByAuthor = book;
+                return bookByAuthor;
             }
         }
     
-        return callNumByAuthor;
+        return bookByAuthor;
     }
 }

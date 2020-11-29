@@ -47,13 +47,13 @@ public class BookTest {
 
 	@Test
 	public void testCheckOut() {
-		standing.checkOutBook();
+		standing.markAsCheckedOut();
 		assertEquals(true, standing.isCheckedOut());
 	}
 
 	@Test
 	public void testReturnBook() {
-		standing.returnBook();
+		standing.markAsAvaiable();
 		assertEquals(false, standing.isCheckedOut());
 	}
 }
