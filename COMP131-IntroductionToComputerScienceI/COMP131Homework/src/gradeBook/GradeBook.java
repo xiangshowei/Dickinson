@@ -179,13 +179,13 @@ public class GradeBook {
 
         for (int hwScore : homeworks) {
             if(hwScore > hwAverage) {
-                if (!((hwScore - hwAverage) == allowableScoreDifference)) {
+                if (!((hwScore - hwAverage) <= allowableScoreDifference)) {
                     consistentHWScores = false;
                 }
             }
 
             else if (hwScore < hwAverage ) {
-                if (!((hwAverage - hwScore) == allowableScoreDifference)) {
+                if (!((hwAverage - hwScore) >= allowableScoreDifference)) {
                     consistentHWScores = false;
                 }
             }
