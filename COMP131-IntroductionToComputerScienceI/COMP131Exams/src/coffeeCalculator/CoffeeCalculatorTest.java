@@ -1,6 +1,7 @@
 package coffeeCalculator;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,22 +9,11 @@ import org.junit.Test;
 /**
  * The test class CoffeeCalculatorTest.
  *
- * @author  (your name)
- * @version (a version number or a date)
+ * @author Xiang Wei
+ * @version 10/09/2013
  */
-public class CoffeeCalculatorTest{
-    private CoffeeCalculator latte;
-    private CoffeeCalculator regularCoffee;
-    private CoffeeCalculator mocha;
-    private CoffeeCalculator cappuccino;
-    private CoffeeCalculator icedCoffee;
-
-    /**
-     * Default constructor for test class CoffeeCalculatorTest
-     */
-    public CoffeeCalculatorTest()
-    {
-    }
+public class CoffeeCalculatorTest {
+    private CoffeeCalculator coffeeCalc1;
 
     /**
      * Sets up the test fixture.
@@ -31,13 +21,8 @@ public class CoffeeCalculatorTest{
      * Called before every test case method.
      */
     @Before
-    public void setUp()
-    {
-        latte = new CoffeeCalculator(40, true);
-        regularCoffee = new CoffeeCalculator(60, true);
-        mocha = new CoffeeCalculator(30, false);
-        cappuccino = new CoffeeCalculator(50, false);
-        icedCoffee = new CoffeeCalculator(80, false);
+    public void setUp() {
+        coffeeCalc1 = new CoffeeCalculator(60, true);
     }
 
     /**
@@ -46,50 +31,41 @@ public class CoffeeCalculatorTest{
      * Called after every test case method.
      */
     @After
-    public void tearDown()
-    {
+    public void tearDown() {
     }
 
     @Test
-    public void testAccessorMethods()
-    {
-        CoffeeCalculator coffeeCa1 = new CoffeeCalculator(40, true);
-        assertEquals(0, coffeeCa1.getAmountSpent());
-        assertEquals(true, coffeeCa1.getIsWeekend());
-        assertEquals(40, coffeeCa1.getTemperature());
+    public void testConstructor() {
+        assertEquals(60, coffeeCalc1.getTemperature());
+        assertEquals(true, coffeeCalc1.getIsWeekend());
+        assertEquals(0, coffeeCalc1.getAmountSpent());
     }
 
     @Test
-    public void testBudgetandAmountSpent()
-    {
-        CoffeeCalculator coffeeCa1 = new CoffeeCalculator(40, true);
-        coffeeCa1.setAmountSpent(600);
-        assertEquals(600, coffeeCa1.getAmountSpent());
-        assertEquals(true, coffeeCa1.isOverBudget());
-        coffeeCa1.setAmountSpent(400);
-        assertEquals(false, coffeeCa1.isOverBudget());
+    public void testIsOverBudget() {
+        assertEquals(false, coffeeCalc1.isOverBudget());
+        coffeeCalc1.setAmountSpent(600);
+        assertEquals(600, coffeeCalc1.getAmountSpent());
+        assertEquals(true, coffeeCalc1.isOverBudget());
     }
 
     @Test
-    public void testBuyCoffeeType()
-    {
-        assertEquals("latte", latte.calculateCoffeeType());
-        assertEquals("regular coffee", regularCoffee.calculateCoffeeType());
-        assertEquals("mocha", mocha.calculateCoffeeType());
-        assertEquals("cappuccino", cappuccino.calculateCoffeeType());
-        assertEquals("iced coffee", icedCoffee.calculateCoffeeType());
+    public void testCalculateCoffeeType() {
+        assertEquals("regular", coffeeCalc1.calculateCoffeeType());
+        coffeeCalc1.setTemperature(35);
+        assertEquals("latte", coffeeCalc1.calculateCoffeeType());
+
+        CoffeeCalculator coffeeCalc2 = new CoffeeCalculator(25, false);
+        assertEquals("mocha", coffeeCalc2.calculateCoffeeType());
+        coffeeCalc2.setTemperature(50);
+        assertEquals("cappuccino", coffeeCalc2.calculateCoffeeType());
+        coffeeCalc2.setTemperature(75);
+        assertEquals("iced", coffeeCalc2.calculateCoffeeType());
     }
 
     @Test
-    public void testEveryCoffee()
-    {
-        latte.buyCoffee(10);
-        regularCoffee.buyCoffee(30);
-        mocha.buyCoffee(20);
-        cappuccino.buyCoffee(25);
-        icedCoffee.buyCoffee(40);
+    public void testBuyCoffee() {
+        coffeeCalc1.buyCoffee(50);
+        assertEquals(412, coffeeCalc1.getAmountSpent());
     }
 }
-
-
-
