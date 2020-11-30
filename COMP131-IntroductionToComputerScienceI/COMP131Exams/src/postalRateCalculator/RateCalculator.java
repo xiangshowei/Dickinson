@@ -92,33 +92,31 @@ public class RateCalculator {
      * @return the total cost of sending the package (in dollars).
      */
     public int getPostageBill() {
-        int standardWeight = 16;
+        int baseWeight = 16;
         int firstClassBaseRate = 34;
         int secondClassClassBaseRate = 20;
         int overWeightRate = 15;
         int cost = 0;
 
         if (rateClass == 1) {
-            if (packageWeight <= standardWeight) {
+            if (packageWeight <= baseWeight) {
                 cost = (firstClassBaseRate * packageWeight) / 100;
             }
         
             else {
-                cost = ((firstClassBaseRate * standardWeight) + ((packageWeight - standardWeight) * overWeightRate)) / 100;
+                cost = ((firstClassBaseRate * baseWeight) + ((packageWeight - baseWeight) * overWeightRate)) / 100;
             } 
         }
         else { // second class
-            if (packageWeight <= standardWeight) {
+            if (packageWeight <= baseWeight) {
                 cost = (secondClassClassBaseRate * packageWeight) / 100;
             }
         
             else {  
-                cost = ((secondClassClassBaseRate * standardWeight) + ((packageWeight - standardWeight) * overWeightRate)) / 100;
+                cost = ((secondClassClassBaseRate * baseWeight) + ((packageWeight - baseWeight) * overWeightRate)) / 100;
             }
         }
         
         return cost;
     }
 }
-
-
