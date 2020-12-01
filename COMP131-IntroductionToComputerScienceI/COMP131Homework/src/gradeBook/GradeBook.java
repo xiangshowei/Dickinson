@@ -14,8 +14,8 @@ package gradeBook;
 public class GradeBook {
 
     private String studentName;
-    private int[] homeworks;
-    private int[] quizzes;
+    private int[] homeworkScores;
+    private int[] quizScores;
 
     /**
      * Construct a new GradeBook for the specified student. You may assume that the
@@ -27,8 +27,8 @@ public class GradeBook {
      */
     public GradeBook(String studentName, int numHomeworks, int numQuizzes) {
         this.studentName = studentName;
-        homeworks = new int[numHomeworks];
-        quizzes = new int[numQuizzes];
+        homeworkScores = new int[numHomeworks];
+        quizScores = new int[numQuizzes];
     }
 
     /**
@@ -48,7 +48,7 @@ public class GradeBook {
      */
 
     public int getNumHomeworks() {
-        return homeworks.length;
+        return homeworkScores.length;
     }
 
     /**
@@ -58,7 +58,7 @@ public class GradeBook {
      */
 
     public int getNumQuizzes() {
-        return quizzes.length;
+        return quizScores.length;
     }
 
     /**
@@ -69,7 +69,7 @@ public class GradeBook {
      */
 
     public void setHomeworkScore(int nthHomework, int score) {
-        homeworks[nthHomework] = score;
+        homeworkScores[nthHomework] = score;
     }
 
     /**
@@ -80,7 +80,7 @@ public class GradeBook {
      */
 
     public void setQuizScore(int nthQuiz, int score) {
-        quizzes[nthQuiz] = score;
+        quizScores[nthQuiz] = score;
     }
 
     /**
@@ -91,7 +91,7 @@ public class GradeBook {
      */
 
     public int getHomeworkScore(int nthHomework) {
-        return homeworks[nthHomework];
+        return homeworkScores[nthHomework];
     }
 
     /**
@@ -102,7 +102,7 @@ public class GradeBook {
      */
 
     public int getQuizScore(int nthQuiz) {
-        return quizzes[nthQuiz];
+        return quizScores[nthQuiz];
     }
 
     /**
@@ -115,11 +115,11 @@ public class GradeBook {
 
     public int getAverageHomeworkScore() {
         int total = 0;
-        for (int homeworkAssignmentScore : homeworks) {
+        for (int homeworkAssignmentScore : homeworkScores) {
             total += homeworkAssignmentScore;
         }
 
-        return total / homeworks.length;
+        return total / homeworkScores.length;
     }
 
     /**
@@ -129,9 +129,9 @@ public class GradeBook {
      */
 
     public int getMinHomeworkScore() {
-        int min = homeworks[0];
+        int min = homeworkScores[0];
 
-        for (int hwScore : homeworks) {
+        for (int hwScore : homeworkScores) {
             if (hwScore < min) {
                 min = hwScore;
             }
@@ -150,12 +150,12 @@ public class GradeBook {
 
     public int getIndexOfHighestHomeworkScore() {
         int index = 0;
-        int maxHomeworkScore = homeworks[0];
+        int maxHomeworkScore = homeworkScores[0];
 
-        for (int i = index + 1; i < homeworks.length; i++) {
-            if (homeworks[i] >= maxHomeworkScore) {
+        for (int i = index + 1; i < homeworkScores.length; i++) {
+            if (homeworkScores[i] >= maxHomeworkScore) {
                 index = i;
-                maxHomeworkScore = homeworks[i];
+                maxHomeworkScore = homeworkScores[i];
             }
         }
         return index;
@@ -177,7 +177,7 @@ public class GradeBook {
         boolean consistentHWScores = true;
         int hwAverage = getAverageHomeworkScore();
 
-        for (int hwScore : homeworks) {
+        for (int hwScore : homeworkScores) {
             if(hwScore > hwAverage) {
                 if (!((hwScore - hwAverage) <= allowableScoreDifference)) {
                     consistentHWScores = false;
@@ -213,8 +213,8 @@ public class GradeBook {
      */
 
     public boolean hasDuplicateScore() {
-        for (int hwScore : homeworks) {
-            for (int quizScore : quizzes) {
+        for (int hwScore : homeworkScores) {
+            for (int quizScore : quizScores) {
                 if (hwScore == quizScore) {
                     return true;
                 }
@@ -234,8 +234,8 @@ public class GradeBook {
     public int findMaxConsecutiveHWScoreDifference() {
         int maxConsecutiveHWScoreDifference = 0;
 
-        for (int i = 0; i < homeworks.length - 1; i++) {
-            int scoreDifference = homeworks[i + 1] - homeworks[i];
+        for (int i = 0; i < homeworkScores.length - 1; i++) {
+            int scoreDifference = homeworkScores[i + 1] - homeworkScores[i];
             if (scoreDifference > maxConsecutiveHWScoreDifference) {
                 maxConsecutiveHWScoreDifference = scoreDifference;
             }
@@ -255,8 +255,8 @@ public class GradeBook {
         boolean hasShownEnoughImprovement = false;
         int actualNumQuizScoreImprovements = 0;
 
-        for (int i = quizzes.length - 1; i >= 1; i--) {
-            if (quizzes[i] > quizzes[i - 1]) {
+        for (int i = quizScores.length - 1; i >= 1; i--) {
+            if (quizScores[i] > quizScores[i - 1]) {
                 actualNumQuizScoreImprovements++;
             }
 
@@ -280,11 +280,11 @@ public class GradeBook {
         int numIncreases = 0;
         int numDecreases = 0;
 
-        for (int i = 0; i < homeworks.length - 1; i++) {
-            if (homeworks[i + 1] > homeworks[i]) {
+        for (int i = 0; i < homeworkScores.length - 1; i++) {
+            if (homeworkScores[i + 1] > homeworkScores[i]) {
                 numIncreases += 1;
             }
-            if (homeworks[i + 1] < homeworks[i]) {
+            if (homeworkScores[i + 1] < homeworkScores[i]) {
                 numDecreases += 1;
             }
         }
