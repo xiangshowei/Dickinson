@@ -1,4 +1,4 @@
-package golf;
+package golfScoreCard;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,35 +14,35 @@ import org.junit.After;
  */
 public class GolfScoreCardTest {
 
-	private GolfScoreCard gsc;
+    private GolfScoreCard gsc;
 
-	/**
-	 * Sets up the test fixture.
-	 *
-	 * Called before every test case method.
-	 */
-	
-	@Before
-	public void setUp() {
+    /**
+     * Sets up the test fixture.
+     *
+     * Called before every test case method.
+     */
+
+    @Before
+    public void setUp() {
         gsc = new GolfScoreCard("Bob", 2);
         gsc.setHoleScore(0, 1);
         gsc.setHoleScore(1, 2);
-	}
+    }
 
-	/**
-	 * Tears down the test fixture.
-	 *
-	 * Called after every test case method.
-	 */
-	
-	@After
-	public void tearDown() {
-	}
+    /**
+     * Tears down the test fixture.
+     *
+     * Called after every test case method.
+     */
 
-	@Test
-	public void testConstructor() {
-		assertEquals("Bob", gsc.getPlayersName());
-		assertEquals(2, gsc.getNumHoles());
+    @After
+    public void tearDown() {
+    }
+
+    @Test
+    public void testConstructor() {
+        assertEquals("Bob", gsc.getPlayersName());
+        assertEquals(2, gsc.getNumHoles());
         assertEquals(0, gsc.getTotalScore());
         assertEquals(1, gsc.getHoleScore(0));
         assertEquals(3, gsc.getTotalScore());
@@ -51,21 +51,21 @@ public class GolfScoreCardTest {
     }
 
     @Test
-	public void testHasAce() {
+    public void testHasAce() {
         assertEquals(true, gsc.hasAce());
         gsc.setHoleScore(0, 3);
         assertEquals(false, gsc.hasAce());
     }
 
     @Test
-	public void testPlayWithProfessionals() {
+    public void testPlayWithProfessionals() {
         assertEquals(true, gsc.canPlayWithProfessionals());
         gsc.setHoleScore(0, 10);
         assertEquals(false, gsc.canPlayWithProfessionals());
     }
 
     @Test
-	public void testGetIndexOfMaxScore() {
+    public void testGetIndexOfMaxScore() {
         assertEquals(1, gsc.getIndexOfMaxScore());
 
         gsc.setHoleScore(0, 10);
@@ -73,14 +73,14 @@ public class GolfScoreCardTest {
     }
 
     @Test
-	public void testAdjustScoresForHandicap() {
+    public void testAdjustScoresForHandicap() {
         gsc.adjustScoresForHandicap(1);
         assertEquals(1, gsc.getHoleScore(0));
         assertEquals(1, gsc.getHoleScore(1));
     }
 
     @Test
-	public void testCheat() {
+    public void testCheat() {
         gsc.setHoleScore(0, 10);
         gsc.setHoleScore(1, 5);
         GolfScoreCard gsc2 = gsc.cheat(2);
