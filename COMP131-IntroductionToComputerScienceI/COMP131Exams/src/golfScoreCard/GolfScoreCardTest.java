@@ -12,6 +12,7 @@ import org.junit.After;
  * @author Xiang Wei
  * @version 7/23/2016
  */
+
 public class GolfScoreCardTest {
 
     private GolfScoreCard gsc;
@@ -43,9 +44,9 @@ public class GolfScoreCardTest {
     public void testConstructor() {
         assertEquals("Bob", gsc.getPlayersName());
         assertEquals(2, gsc.getNumHoles());
-        assertEquals(0, gsc.getTotalScore());
-        assertEquals(1, gsc.getHoleScore(0));
         assertEquals(3, gsc.getTotalScore());
+        gsc.setHoleScore(1, 10);
+        assertEquals(11, gsc.getTotalScore());
 
         assertEquals(-1, gsc.getHoleScore(-7));
     }
@@ -58,7 +59,7 @@ public class GolfScoreCardTest {
     }
 
     @Test
-    public void testPlayWithProfessionals() {
+    public void testCanPlayWithProfessionals() {
         assertEquals(true, gsc.canPlayWithProfessionals());
         gsc.setHoleScore(0, 10);
         assertEquals(false, gsc.canPlayWithProfessionals());

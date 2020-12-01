@@ -7,6 +7,7 @@ package golfScoreCard;
  * @author Xiang Wei
  * @version 7/23/2016
  */
+
 public class GolfScoreCard {
 	private String playerName;
 	private int[] scoreCard;
@@ -48,12 +49,15 @@ public class GolfScoreCard {
 	 * 
 	 * Only positive scores are valid in golf.
 	 * 
-	 * @param hole  the hole for which to set the score.
-	 * @param score the player's score on the hole.
+	 * @param hole     the hole for which to set the score.
+	 * @param newScore the player's score on the hole.
 	 */
-	public void setHoleScore(int hole, int score) {
-		if (score > 0) {
-			scoreCard[hole] = score;
+
+	public void setHoleScore(int hole, int newScore) {
+		if (newScore > 0) {
+			int currentScore = getHoleScore(hole);
+			totalScore += Math.abs(newScore - currentScore);
+			scoreCard[hole] = newScore;
 		}
 	}
 
@@ -80,10 +84,6 @@ public class GolfScoreCard {
 	 * @return the player's total score.
 	 */
 	public int getTotalScore() {
-		for (int score : scoreCard) {
-			totalScore += score;
-		}
-
 		return totalScore;
 	}
 
