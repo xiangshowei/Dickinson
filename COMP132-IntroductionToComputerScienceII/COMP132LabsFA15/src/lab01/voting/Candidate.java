@@ -73,14 +73,14 @@ public class Candidate {
      * 
      * @return this candidate's votes.
      */
-    public int getVotes() {
+    public int getNumVotes() {
         return votes;
     }
     
     /**
      * Increase the number of votes for this candidate by 1.
      */
-    public void increaseVotes() {
+    public void increaseVoteByOne() {
         votes++;
     }
     
@@ -100,7 +100,7 @@ public class Candidate {
      * @return true if this candidate defeated the opponent.
      */
     public boolean hasMoreVotesThan(Candidate opp) {
-        return votes > opp.getVotes();
+        return votes > opp.getNumVotes();
     }
     
     /**

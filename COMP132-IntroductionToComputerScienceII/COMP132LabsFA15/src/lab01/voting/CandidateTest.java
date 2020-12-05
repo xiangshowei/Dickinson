@@ -35,22 +35,22 @@ public class CandidateTest {
     public void testConstructor() {
         assertEquals("Joe", joeD.getName());
         assertEquals(Candidate.DEMOCRAT, joeD.getParty());
-        assertEquals(10, joeD.getVotes()); 
+        assertEquals(10, joeD.getNumVotes()); 
     }
 
     @Test
     public void testIncreaseVotes() {
-        assertEquals(10, joeD.getVotes()); 
-        joeD.increaseVotes();
-        assertEquals(11, joeD.getVotes());
+        assertEquals(10, joeD.getNumVotes()); 
+        joeD.increaseVoteByOne();
+        assertEquals(11, joeD.getNumVotes());
         joeD.increaseVotes(5);
-        assertEquals(16, joeD.getVotes()); 
+        assertEquals(16, joeD.getNumVotes()); 
     }
     
     @Test
     public void testDefeated() {
-    	assertEquals(10, joeD.getVotes());
-        assertEquals(8, bobI.getVotes());
+    	assertEquals(10, joeD.getNumVotes());
+        assertEquals(8, bobI.getNumVotes());
         assertEquals(true, joeD.hasMoreVotesThan(bobI));
         assertEquals(false, bobI.hasMoreVotesThan(joeD));
         assertEquals(false, bobI.hasMoreVotesThan(janeR));

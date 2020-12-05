@@ -40,11 +40,11 @@ public class Election {
 		System.out.print("Please vote for a candidate or a specific party: ");
 		String inputName = scr.nextLine(); 
 		
-		Candidate candidate = ge.getCandidate(inputName);
+		Candidate candidate = ge.getCandidateByName(inputName);
 		if(inputName.equals(candidate.getName())) {
 			ge.voteForCandidate(inputName);
 			System.out.println("You have just voted for " + candidate.getName());
-			System.out.println(candidate.getName() + " has " + candidate.getVotes() + " number of vote(s)"  );
+			System.out.println(candidate.getName() + " has " + candidate.getNumVotes() + " number of vote(s)"  );
 		}
 		
 		scr.close(); 

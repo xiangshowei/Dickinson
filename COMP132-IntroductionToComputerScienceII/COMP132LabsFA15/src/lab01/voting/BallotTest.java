@@ -1,87 +1,69 @@
 package lab01.voting;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class BallotTest {
 
-	private Ballot b1; 
-	private Candidate joe;
+	private Ballot ballot; 
+	private Candidate bob;
+	private Candidate sarah;
 	
 	@Before
     public void setUp() throws Exception {
-        /*
-         * Construct all of the objects being used in the test fixture here.
-         */
-		joe = new Candidate("Joe", Candidate.DEMOCRAT);
-        b1 = new Ballot("Astronomy Club");
-  
-    }
+		bob = new Candidate("Bob", Candidate.INDEPENDENT);
+		sarah = new Candidate("Sarah", Candidate.LIBERTARIAN);
+
+		ballot = new Ballot("DistrictJudge");
+		ballot.addCandidate(bob);
+		ballot.addCandidate(sarah);
+	}
+	
+	@After
+	public void tearDown() {
+
+	}
 	
 	@Test
 	public void testConstructor() {
-		assertEquals("the astronomy club should be having an election", "Astronomy Club", b1.getElection());
-		assertEquals("the number of candidates running for the astronomy club should be zero", 0, b1.getNumCandidates());
+		assertEquals("DistrictJudge", ballot.getElectionTitle());
+		assertEquals(2, ballot.getNumCandidates());
+
+		assertEquals(bob, ballot.getCandidateByName("Bob"));
+		assertEquals(sarah, ballot.getCandidateByName("Sarah"));
+		assertEquals(null, ballot.getCandidateByName("Joe"));
 	}
 	
 	@Test
 	public void testAddCandidate(){
-		assertEquals("the number of candidates running for the astronomy club should be zero", 0, b1.getNumCandidates());
-		b1.addCandidate(joe);
-		assertEquals("the number of candidates running for the astronomy club should be one", 1, b1.getNumCandidates());
-	}
-	
-	@Test 
-	public void testGetCandidateNull(){
-		b1.addCandidate(joe);
-		assertEquals("the number of candidates running for the astronomy club should be one", 1, b1.getNumCandidates());
-		assertNull("Bob should NOT exist as a Candidate option", b1.getCandidate("Bob"));
+		assertEquals(2, ballot.getNumCandidates());
+		ballot.addCandidate(new Candidate("Joe", Candidate.DEMOCRAT));
+		assertEquals(3, ballot.getNumCandidates());
 	}
 	
 	@Test
-	public void testGetCandidateSuccessful(){
-		b1.addCandidate(joe); 
-		assertSame("Joe(c1) should be a candidate in the ballot", joe, b1.getCandidate("Joe"));
+	public void testVoteForCandidate() {
+		assertEquals(0, sarah.getNumVotes());
+		ballot.voteForCandidate("Sarah");
+		assertEquals(1, sarah.getNumVotes());	
 	}
 	
 	@Test
-	public void testVoteForCandidateSuccessful() {
-		b1.addCandidate(joe);
-		assertEquals("Joe should have no votes", 0, joe.getVotes());
-		b1.voteForCandidate("Joe");
-		assertEquals("Joe should have one vote", 1, joe.getVotes());		
+	public void voteStraightTicket() {
+		Candidate jack = new Candidate("Jack", Candidate.LIBERTARIAN);
+		ballot.addCandidate(jack);
+
+		assertEquals(0, bob.getNumVotes());
+		assertEquals(0, sarah.getNumVotes());
+		assertEquals(0, jack.getNumVotes());	
+		
+		ballot.voteStraightTicket(Candidate.LIBERTARIAN);
+
+		assertEquals(0, bob.getNumVotes());
+		assertEquals(1, sarah.getNumVotes());
+		assertEquals(1, jack.getNumVotes());
 	}
-	
-	@Test
-	public void testVoteForCandidateError() {
-		b1.addCandidate(joe);
-		assertEquals("Joe should have no votes", 0, joe.getVotes());
-		assertEquals("There should be one candidate running in this election", 1, b1.getNumCandidates());
-		b1.voteForCandidate("Jack");
-	}
-	
-	@Test
-	public void voteStraightTicketSuccessful() {
-		Candidate c2 = new Candidate("Robert", Candidate.DEMOCRAT, 2);
-		Candidate c3 = new Candidate("Sue", Candidate.DEMOCRAT, 9);
-		Candidate c4 = new Candidate("Vivian", Candidate.LIBERTARIAN, 5);
-		b1.addCandidate(joe);
-		b1.addCandidate(c2);
-		b1.addCandidate(c3);
-		b1.addCandidate(c4);
-		b1.voteStraightTicket(Candidate.DEMOCRAT);
-		assertEquals("Joe should have one vote", 1, joe.getVotes());
-		assertEquals("Robert should have 3 votes", 3, c2.getVotes());
-		assertEquals("Sue should have 10", 10, c3.getVotes());
-		assertEquals("Vivian's number of votes should NOT have changed", 5, c4.getVotes());
-	}
-	
-	@Test
-	public void voteStraightTicketPartyNOTonBallot(){
-		b1.addCandidate(joe);
-		b1.voteStraightTicket(Candidate.INDEPENDENT);
-	}
-	
 }
