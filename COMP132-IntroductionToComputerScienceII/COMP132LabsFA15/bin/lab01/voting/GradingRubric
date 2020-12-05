@@ -1,0 +1,71 @@
+132 Lab Grading Rubric
+
+Xiang
+
+  8 / 10	- Correctness
+  
+  	Test Name:								Passes	Fails
+  	-------------------------------------------------------
+	For Candidate Class:
+		testDefeatedTrue					X
+		testDefeatedFalse					X
+		testDefeatedTie						X
+		testNotSameParty					X
+		testSameParty						X
+		testSamePartyUsesEquals				X
+	
+	For Ballot Class:
+		testConstructor						X
+		testAddGetCandidate							X
+			* In getCandidate you need to use i instead of the 
+			candidatePos variable. The way it is you just repeatedly
+			check the first candidate.
+		testGetCandidateUsesEquals					X
+		testVoteForCandidate						X
+			* this prints messages incorrectly when the candidate
+			is on the ballot.
+		testVoteForCandidateNoCandidate		X
+		testVoteForCandidateUsesEquals		X
+		testVoteForParty							X
+			* this prints messages incorrectly when the candidate
+			is on the ballot.		
+		testVoteForPartyNoCandidates		X
+		testVoteForPartyNotUsingEquals		X
+
+  6.5 / 7 	- Code Quality
+  		* In Ballot, the voteForCandidate method could be improved by
+		invoking the getCandidate method.  This would eliminate the
+		duplicate functionality of iterating over the list of candidates
+		to find the one with the specified name.
+		  
+  5 / 5 	- Documentation / Readability
+		* Overall well done.  There is a misplaced "end for-loop" comment
+		that might be a bit confusing...
+		  
+  7 / 8	- Testing Quality
+		* In the BallotTest class, testing for addCandidate and getCandidate 
+  		could be improved by adding more than a single candidate. Testing 
+  		with only a single candidate only tests that the candidate will
+  		be found if he/she is the first one in the list.
+  		
+  		* In the BallotTest class, testing voteForCandiate could be improved
+  		by adding more than one candidate.  Testing with only a single 
+  		candidate only tests that the candidate will be voted for if he/she is
+  		the first candidate in the list.  
+  		
+  		
+  0 / 0 	- Bonus Features
+		x/1 - Election class with main method (Ballot w/ >= 5 candidates)
+		x/1 - Print method in the Ballot class, invoked from main in Election
+		x/3 - Interactive voting in main with Scanner by name or party w/ Quit
+		x/1 - Winner method in Ballot class w/o ties (Tested)
+		x/2 - Displays all tied candidates
+=====
+ 
+  26.5 / 30	- Total
+  
+=====
+
+   88% - Grade
+
+=====
