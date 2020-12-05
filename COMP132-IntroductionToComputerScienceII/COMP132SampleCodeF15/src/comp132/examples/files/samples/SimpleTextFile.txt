@@ -1,0 +1,6 @@
+This is a simple text file created using a text editor.
+Each byte in the file represents a single character and
+that includes digits such as 1, 2, 3 and numbers like
+3.1415.  Even characters like	(tab) are represented
+using a single byte.  Every character is encoded into 
+a byte using its ASCII code.

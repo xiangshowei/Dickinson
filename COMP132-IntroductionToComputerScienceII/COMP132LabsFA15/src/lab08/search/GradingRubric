@@ -1,0 +1,60 @@
+132 Lab Grading Rubric - Search Engine
+
+  22 / 25	- Correctness
+
+ 	PageInfo (1 pt. each)								yes	no
+ 	 - constructor works								X
+ 	 - compareTo is correct									X
+ 	 - equals is correct								X
+ 	 - equals is case insensitive							X
+ 	
+ 	KeyWord	(1 pt. each)								yes	no
+ 	 - constructor works								X
+ 	 - compareTo is correct								X
+ 	 - equals is correct									X
+ 	 	* should be case insensitive.
+ 	 - Add page works									X
+ 	 - Duplicate page object not added					X
+ 	 - Duplicate page URL not added						X
+ 	 
+ 	KeyWordList											yes	no
+ 	 - 0-Arg constructor works (1pt)					X
+ 	 - WebCrawler index file constructor works (2pt)	X
+ 	 - addKeyWord works	(1pt)							X
+ 	 - addKeyWord does not add duplicate words (1pt)	X
+ 	 - addKeyWord adds pages from duplicate words (1pt)	X
+ 	 - addKeyWord does not add duplicate pages (1pt)	X
+ 	 	to same KeyWord		
+ 	 - search works	(2pt)								X
+ 	 - searchAny works (3pts)								X
+ 	 	* ArrayIndexOutOfBoundsException when my test is run.
+ 	 - searchAll works (3pts)								X
+ 	 	* Misses a match in my test.
+		
+  2.5 / 3 	- Code Quality									yes	no
+    - Makes effective use of Collections methods for	X
+      searching and sorting (e.g. contains, indexOf,
+      sort, binarySearch).
+      
+	- Maintain's KeyWordsList in sorted order rather		X
+	  than always sorting before each search.
+	  
+  2.5 / 3 	- Documentation / Readability
+  	* A high level descriptive comment of how you are approaching the 
+  	  search all and search any methods would be helpful to a reader
+  	  trying to understand your implementation.
+  	  
+  4.5 / 5	- Testing Quality
+  
+  / 0 	- Bonus Features
+	0 / 2 -	Search Engine GUI
+	0 / 2 - Search Engine GUI displays WebPage from Link
+	0 / 2 - Process "and" and "or" in search terms
+	0 / 2 - Quicksort implementation for KeyWordList
+  	
+=====
+ 
+  31.5 / 36	- Total Score
+  87.5%
+  
+=====
