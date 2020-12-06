@@ -1,4 +1,4 @@
-package lab02.minesweeper;
+package lab2.minesweeper;
 
 import java.util.Random;
 

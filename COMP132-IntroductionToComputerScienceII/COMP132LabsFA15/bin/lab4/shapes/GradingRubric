@@ -1,0 +1,69 @@
+132 Lab Grading Rubric - Drawable Shapes Reprise
+
+  31 / 34	- Correctness
+																												
+	Line:													Yes	No	
+		Extends Point										X
+		Correctly overrides move							X
+		Correctly overrides translate						X
+		Correctly overrides draw							X
+		Makes effective use of inheritance	(2)				X
+		
+	Text:													Yes	No	
+		Extends Point										X
+		Correctly overrides draw							X
+		Makes effective use of inheritance	(2)				X	
+			
+	Rectangle:												Yes	No	
+		Extends Point										X
+		Implements Scaleable								X
+		Correctly overrides draw							X
+		Makes effective use of inheritance	(2)				X	
+				
+	Square:													Yes	No	
+		Extends Rectangle									X
+		Makes effective use of inheritance	(3) [DONE]			X	
+		
+	* It is not necessary to override the draw method in Square.  If Square
+	  otherwise ensures that width and height are the same then the draw
+	  method inherited from Rectangle will work just fine!
+	  				
+	Ellipse:												Yes	No	
+		Extends Point										X
+		Implements Scaleable								X
+		Correctly overrides draw							X
+		Makes effective use of inheritance	(2)				X	
+				
+	Circle:													Yes	No	
+		Extends Ellipse										X
+		Makes effective use of inheritance	(3)	[DONE]			X	
+		
+	* It is not necessary to override the draw method in Circle. If Circle
+	  otherwise ensures that radii (or width/height) are the same then the draw
+	  method inherited from Ellipse will work just fine!
+	  		
+    Picture / Animation:									Yes	No	
+    	Uses one of each shape				(6)				X
+
+		* Nicely done!
+		
+  5 / 5 	- Code Quality									Yes	No
+	Uses super instead of public or protected fields.		X
+	
+  3 / 3 	- Documentation / Readability
+  
+  2 / 3	- Testing Quality
+ 
+ 	* LineTest should test translation to ensure that the overridden method
+ 	  works correctly as well as that the call to super is made correctly.
+ 
+  0 / 0 	- Bonus Features
+  	x / 2 - Compound Shape Class w/ tests
+  	x / 2 - Filled Polygon Class with move/translate/tests
+  	x / 5 - Image Class
+=====
+ 
+  41 / 45	- Total Score
+  91%
+  
+=====

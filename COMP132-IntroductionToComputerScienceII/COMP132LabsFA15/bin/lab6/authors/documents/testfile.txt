@@ -1,0 +1,3 @@
+This file has some words, sentences, and phrases, in it.
+This file, and others like it that you create, can be used
+for testing your TextSignature class.
