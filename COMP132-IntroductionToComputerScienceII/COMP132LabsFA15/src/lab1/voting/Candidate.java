@@ -12,20 +12,10 @@ package lab1.voting;
 public class Candidate {
 
     public enum Party {
-        DEMOCRAT("DEMOCRAT"),
-        REPUBLICAN("REPUBLICAN"),
-        LIBERTARIAN("LIBERTARIAN"),
-        INDEPENDENT("INDEPENDENT");
-        
-        private final String politicalParty;
-
-        private Party(String politicalAffiliation) {
-            politicalParty = politicalAffiliation;
-        }
-
-        public String getParty() {
-            return politicalParty;
-        }
+        DEMOCRAT,
+        REPUBLICAN,
+        LIBERTARIAN,
+        INDEPENDENT;
     }
     
     private String name;
@@ -120,8 +110,7 @@ public class Candidate {
      * the same political party.
      * 
      * @param other the other candidate.
-     * @return true if this candidate an the other candidate are affiliated with
-     * the same party.
+     * @return true if this candidate an the other candidate are affiliated with the same party.
      */
     public boolean isSamePartyAs(Candidate other) {
     	return party.equals(other.getParty());

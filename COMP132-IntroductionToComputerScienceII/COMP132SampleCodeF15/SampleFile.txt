@@ -1,3 +1,0 @@
-This is a basic ASCII text file.
-Even numbers like 123 and 3.14 are put into ASCII.
-The End!
