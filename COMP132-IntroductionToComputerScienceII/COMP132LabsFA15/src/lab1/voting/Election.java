@@ -1,16 +1,16 @@
 package lab1.voting;
 
 import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Scanner;
-import java.util.Map.Entry;
 
 import lab1.voting.Candidate.Party;
 
 public class Election {
 	public static void main(String args[]) {
 		Ballot djBallot = setup();
+
+		Ballot.printTiedCandidates(djBallot);
+
 		boolean voteCasted = false;
 		Scanner scr = new Scanner(System.in);
 		
@@ -26,7 +26,7 @@ public class Election {
 			else { 
 				// vote by candidate name
 				if (input.equals("c") || input.equals("candidate")) {
-					printCandidatesOnBallot(djBallot);
+					Ballot.printCandidatesOnBallot(djBallot);
 					
 					System.out.print("Please indicate which candidate to vote for: ");
 					
@@ -55,7 +55,7 @@ public class Election {
 				
 				// straight ticket vote
 				else if(input.equals("p") || input.equals("party")) {
-					printPartiesOnBallot(djBallot);
+					Ballot.printPartiesOnBallot(djBallot);
 					
 					System.out.print("Please indicate which party to vote for: ");
 					
@@ -70,7 +70,7 @@ public class Election {
 							
 							voteCasted = true;
 							
-							printBallotSummary(djBallot, partyToVoteFor);
+							Ballot.printBallotSummary(djBallot, partyToVoteFor);
 						}
 						
 					} catch (IllegalArgumentException iae) {
@@ -92,9 +92,13 @@ public class Election {
 		Ballot ballot = new Ballot("DistrictJudge");
 		Candidate c1 = new Candidate("Alex", Candidate.Party.DEMOCRAT);
 		Candidate c2 = new Candidate("Bob", Candidate.Party.LIBERTARIAN);
-		Candidate c3 = new Candidate("Carlos", Candidate.Party.REPUBLICAN);
-		Candidate c4 = new Candidate("Hubert", Candidate.Party.REPUBLICAN);
-		Candidate c5 = new Candidate("John", Candidate.Party.LIBERTARIAN);
+		Candidate c3 = new Candidate("Carlos", Candidate.Party.INDEPENDENT);
+		Candidate c4 = new Candidate("Diane", Candidate.Party.REPUBLICAN);
+		Candidate c5 = new Candidate("Jane", Candidate.Party.LIBERTARIAN);
+
+		// c1.increaseVotes(2);
+		// c4.increaseVotes(2);
+		// c5.increaseVoteByOne();
 		
 		ballot.addCandidate(c1);
 		ballot.addCandidate(c2);
@@ -108,53 +112,5 @@ public class Election {
 	private static void printVotingOptions() {
 		System.out.println();
 		System.out.print("Please specify if you want to vote by (c)andidate name, (p)arty affiliation, or (e)xit: ");
-	}
-
-	private static void printCandidatesOnBallot(Ballot ballot) {
-		Iterator<Entry<String, Candidate>> ballotIterator = ballot.getAllCandidates().entrySet().iterator();
-
-		System.out.println();
-		System.out.println("Candidates and their affiliated party:");
-		System.out.println();
-
-		while (ballotIterator.hasNext()) {
-			Candidate candidate = ballotIterator.next().getValue();
-			System.out.println(candidate.getName() + "	: " + candidate.getParty());
-		}
-
-		System.out.println();
-	}
-
-	private static void printPartiesOnBallot(Ballot ballot) {
-		HashSet<Party> partiesOnBallot = new HashSet<Party>();
-		Iterator<Entry<String, Candidate>> allCandidatesIterator = ballot.getAllCandidates().entrySet().iterator();		
-		StringBuilder sb = new StringBuilder("Parties on this ballot: \n");
-
-		while (allCandidatesIterator.hasNext()) {
-			Party party = allCandidatesIterator.next().getValue().getParty();
-			if(partiesOnBallot.add(party)){
-				sb.append(party.name() + "\n");
-			}
-		}
-
-		System.out.println();
-		System.out.println(sb.toString());
-	}
-
-	private static void printBallotSummary(Ballot ballot, Party party) {
-		Iterator<Entry<String, Candidate>> candidatesIterator = ballot.getAllCandidates().entrySet().iterator();
-
-		StringBuilder sb = new StringBuilder("You voted for: \n");
-
-		while (candidatesIterator.hasNext()){
-			Candidate candidate = candidatesIterator.next().getValue();
-			
-			if(candidate.getParty().equals(party)) {
-				sb.append(candidate.getName() + "\n");	
-			}
-		}
-
-		System.out.println();
-		System.out.println(sb.toString());
 	}
 }

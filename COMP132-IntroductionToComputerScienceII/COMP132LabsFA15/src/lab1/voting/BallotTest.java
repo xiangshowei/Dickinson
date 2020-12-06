@@ -52,7 +52,7 @@ public class BallotTest {
 	}
 	
 	@Test
-	public void voteStraightTicket() {
+	public void testVoteStraightTicket() {
 		Candidate jack = new Candidate("Jack", Candidate.Party.LIBERTARIAN);
 		ballot.addCandidate(jack);
 
