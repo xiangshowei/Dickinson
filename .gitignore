@@ -1,4 +1,4 @@
-i.DS_Store
+.DS_Store
 
 .project
 
@@ -11,5 +11,5 @@ i.DS_Store
 .vscode
 
 # Grading rubrics
-/COMP132-IntroductionToComputerScienceII/COMP132LabsFA15/bin/lab1/voting/GradingRubric.txt
-/COMP132-IntroductionToComputerScienceII/COMP132LabsFA15/src/lab1/voting/GradingRubric.txt
+/COMP132-IntroductionToComputerScienceII/COMP132LabsFA15/bin/lab1/voting/GradingRubric
+/COMP132-IntroductionToComputerScienceII/COMP132LabsFA15/src/lab1/voting/GradingRubric
