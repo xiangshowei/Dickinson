@@ -96,10 +96,6 @@ public class Election {
 		Candidate c4 = new Candidate("Diane", Candidate.Party.REPUBLICAN);
 		Candidate c5 = new Candidate("Jane", Candidate.Party.LIBERTARIAN);
 
-		// c1.increaseVotes(2);
-		// c4.increaseVotes(2);
-		// c5.increaseVoteByOne();
-		
 		ballot.addCandidate(c1);
 		ballot.addCandidate(c2);
 		ballot.addCandidate(c3);
@@ -110,7 +106,6 @@ public class Election {
 	}
 
 	private static void printVotingOptions() {
-		System.out.println();
 		System.out.print("Please specify if you want to vote by (c)andidate name, (p)arty affiliation, or (e)xit: ");
 	}
 }

@@ -1,6 +1,5 @@
 package lab1.voting;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -146,97 +145,51 @@ public class Ballot {
 		System.out.println(sb.toString());
 	}
 
-	private static HashMap<Integer, ArrayList<Candidate>> getTiedCandidates(Ballot ballot) {
-		HashMap<Integer, ArrayList<Candidate>> tiedCandidatesByVote = new HashMap<Integer, ArrayList<Candidate>>();
-
-		HashMap<String, Candidate> candidates = ballot.getAllCandidates();
-		Iterator<Entry<String, Candidate>> ballotIterator = candidates.entrySet().iterator();
-
+	private static HashMap<Integer, HashSet<Candidate>> getTiedCandidates(Ballot ballot) {
+		HashMap<Integer, HashSet<Candidate>> tiedCandidatesByVote = new HashMap<Integer, HashSet<Candidate>>();
+		Iterator<Entry<String, Candidate>> ballotIterator = ballot.getAllCandidates().entrySet().iterator();
 		while(ballotIterator.hasNext()) {
-			Candidate curCandidate = ballotIterator.next().getValue();
-			Candidate nextCandidate = null;
-			ArrayList<Candidate> tiedCandidates = new ArrayList<Candidate>();
-
-			while (ballotIterator.hasNext()) {
-				nextCandidate = ballotIterator.next().getValue();
-
-				if(curCandidate.getNumVotes() == nextCandidate.getNumVotes()) {
-					tiedCandidates.add(nextCandidate);
-
-					// System.out.println();
-					// System.out.println("nextCandidate: " + nextCandidate.getName());
-					// System.out.println("currentCandidate: " + curCandidate.getName());
-				}
-			}
-
-			if(nextCandidate != null) {
-				if(curCandidate.getNumVotes() == nextCandidate.getNumVotes()) {
-					tiedCandidates.add(curCandidate);
-				}
-			}
+			Candidate candidate = ballotIterator.next().getValue();
 			
-			//cur -> alex; next -> Jane. Want: cur -> bob
-			tiedCandidatesByVote.put(curCandidate.getNumVotes(), tiedCandidates);
+			//no candidate with same number of votes exists
+			if(tiedCandidatesByVote.get(candidate.getNumVotes()) == null) {
+				HashSet<Candidate> candidatesByVoteCount = new HashSet<Candidate>();
+				candidatesByVoteCount.add(candidate);
+				tiedCandidatesByVote.put(candidate.getNumVotes(), candidatesByVoteCount);
+			}
+
+			//add to existing HashSet
+			else {
+				HashSet<Candidate> existingTieCandidates = tiedCandidatesByVote.get(candidate.getNumVotes());
+				existingTieCandidates.add(candidate);
+			}
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		// while (ballotIterator.hasNext()) {
-		// 	ArrayList<Candidate> tiedVoteCandidates = new ArrayList<Candidate>();
-		// 	Candidate currentCandidate = ballotIterator.next().getValue();
-
-		// 	while (ballotIterator.hasNext()) {
-		// 		Candidate nextCandidate = ballotIterator.next().getValue();
-
-		// 		if (currentCandidate.getNumVotes() == nextCandidate.getNumVotes()) {
-		// 			// tiedVoteCandidates.add(currentCandidate);
-		// 			tiedVoteCandidates.add(nextCandidate);
-		// 		}
-		// 	}
-
-		// 	// if (currentCandidate.getNumVotes() == nextCandidate.getNumVotes()) {
-		// 	// 	tiedVoteCandidates.add(currentCandidate);
-		// 	// }
-
-		// 	tiedCandidatesByVote.put(currentCandidate.getNumVotes(), tiedVoteCandidates);
-		// }
 
 		return tiedCandidatesByVote;
 	}
 
 	public static void printTiedCandidates(Ballot ballot) {
-		Iterator<Entry<Integer, ArrayList<Candidate>>> tiedCandidatesByVoteIterator = getTiedCandidates(ballot).entrySet().iterator();
-
 		System.out.println();
 		System.out.println("Candidates with tied votes: ");
+		System.out.println();
+		
+		Iterator<Entry<Integer, HashSet<Candidate>>> tiedCandidatesByVoteIterator = getTiedCandidates(ballot).entrySet().iterator();
 
 		while (tiedCandidatesByVoteIterator.hasNext()) {
-			ArrayList<Candidate> tiedCandidates = tiedCandidatesByVoteIterator.next().getValue();
+			//getting the entry so the pointer to the next doesn't get advanced each time a method is called on top of next()
+			Entry<Integer, HashSet<Candidate>> entry = tiedCandidatesByVoteIterator.next();
+			HashSet<Candidate> candidatesByVoteCount = entry.getValue();
+			
+			if(candidatesByVoteCount.size() > 1) {
+				System.out.println("Votes: " + entry.getKey());
+				System.out.println("----------");
 
-			// System.out.println("Votes: " + tiedCandidatesByVoteIterator.next().getKey());
-
-			for (Candidate candidate : tiedCandidates) {
-				System.out.println(candidate.getName());
+				for (Candidate candidate : candidatesByVoteCount) {
+					System.out.println(candidate.getName());
+				}
 			}
-		}
+
+			System.out.println();
+		}	
 	}
 }
