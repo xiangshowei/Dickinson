@@ -91,10 +91,35 @@ public class Ballot {
 	/**
 	 * Gets all of the candidates on the ballot
 	 * 
-	 * @return the ArrayList containing all of the candidates
+	 * @return a HashMap containing all candidates
 	 */
 	public HashMap<String, Candidate> getAllCandidates() {
 		return candidates;
+	}
+
+	public Candidate getWinner(Ballot ballot) {
+		HashMap<String, Candidate> candidates = ballot.getAllCandidates(); 
+		Iterator<Entry<String, Candidate>> ballotIterator = candidates.entrySet().iterator();
+		Candidate winner = null;
+
+		if(!candidates.isEmpty()) {
+			if(candidates.size() == 1) {
+				return ballotIterator.next().getValue();
+			}
+
+			else {
+				winner = ballotIterator.next().getValue();
+
+				while(ballotIterator.hasNext()) {
+					Candidate candidate = ballotIterator.next().getValue();
+					if(candidate.hasMoreVotesThan(winner)) {
+						winner = candidate;
+					}
+				}
+			}
+		}
+
+		return winner;
 	}
 
 	public static void printCandidatesOnBallot(Ballot ballot) {
@@ -102,7 +127,7 @@ public class Ballot {
 
 		System.out.println();
 		System.out.println("Candidates and their affiliated party:");
-		System.out.println();
+		System.out.println("----------------------------------------");
 
 		while (ballotIterator.hasNext()) {
 			Candidate candidate = ballotIterator.next().getValue();
@@ -115,7 +140,7 @@ public class Ballot {
 	public static void printPartiesOnBallot(Ballot ballot) {
 		HashSet<Party> partiesOnBallot = new HashSet<Party>();
 		Iterator<Entry<String, Candidate>> allCandidatesIterator = ballot.getAllCandidates().entrySet().iterator();
-		StringBuilder sb = new StringBuilder("Parties on this ballot: \n");
+		StringBuilder sb = new StringBuilder();
 
 		while (allCandidatesIterator.hasNext()) {
 			Party party = allCandidatesIterator.next().getValue().getParty();
@@ -125,13 +150,14 @@ public class Ballot {
 		}
 
 		System.out.println();
+		System.out.println("Parties on this ballot:");
+		System.out.println("-------------------------");
 		System.out.println(sb.toString());
 	}
 
 	public static void printBallotSummary(Ballot ballot, Party party) {
 		Iterator<Entry<String, Candidate>> candidatesIterator = ballot.getAllCandidates().entrySet().iterator();
-
-		StringBuilder sb = new StringBuilder("You voted for: \n");
+		StringBuilder sb = new StringBuilder();
 
 		while (candidatesIterator.hasNext()) {
 			Candidate candidate = candidatesIterator.next().getValue();
@@ -141,42 +167,42 @@ public class Ballot {
 			}
 		}
 
-		System.out.println();
+		System.out.println("You voted for:");
+		System.out.println("---------------");
 		System.out.println(sb.toString());
 	}
 
-	private static HashMap<Integer, HashSet<Candidate>> getTiedCandidates(Ballot ballot) {
-		HashMap<Integer, HashSet<Candidate>> tiedCandidatesByVote = new HashMap<Integer, HashSet<Candidate>>();
+	private static HashMap<Integer, HashSet<Candidate>> getCandidatesByVoteCount(Ballot ballot) {
+		HashMap<Integer, HashSet<Candidate>> candidatesByVote = new HashMap<Integer, HashSet<Candidate>>();
 		Iterator<Entry<String, Candidate>> ballotIterator = ballot.getAllCandidates().entrySet().iterator();
+
 		while(ballotIterator.hasNext()) {
 			Candidate candidate = ballotIterator.next().getValue();
 			
-			//no candidate with same number of votes exists
-			if(tiedCandidatesByVote.get(candidate.getNumVotes()) == null) {
-				HashSet<Candidate> candidatesByVoteCount = new HashSet<Candidate>();
-				candidatesByVoteCount.add(candidate);
-				tiedCandidatesByVote.put(candidate.getNumVotes(), candidatesByVoteCount);
+			//new vote count
+			if(candidatesByVote.get(candidate.getNumVotes()) == null) {
+				HashSet<Candidate> newVoteCountCandidates = new HashSet<Candidate>();
+				newVoteCountCandidates.add(candidate);
+				candidatesByVote.put(candidate.getNumVotes(), newVoteCountCandidates);
 			}
 
-			//add to existing HashSet
+			//existing vote count 
 			else {
-				HashSet<Candidate> existingTieCandidates = tiedCandidatesByVote.get(candidate.getNumVotes());
+				HashSet<Candidate> existingTieCandidates = candidatesByVote.get(candidate.getNumVotes());
 				existingTieCandidates.add(candidate);
 			}
 		}
 
-		return tiedCandidatesByVote;
+		return candidatesByVote;
 	}
 
 	public static void printTiedCandidates(Ballot ballot) {
 		System.out.println();
-		System.out.println("Candidates with tied votes: ");
-		System.out.println();
 		
-		Iterator<Entry<Integer, HashSet<Candidate>>> tiedCandidatesByVoteIterator = getTiedCandidates(ballot).entrySet().iterator();
+		Iterator<Entry<Integer, HashSet<Candidate>>> tiedCandidatesByVoteIterator = getCandidatesByVoteCount(ballot).entrySet().iterator();
 
 		while (tiedCandidatesByVoteIterator.hasNext()) {
-			//getting the entry so the pointer to the next doesn't get advanced each time a method is called on top of next()
+			//getting the entry so the pointer doesn't get advanced to the next entry each time a method is called on top of next()
 			Entry<Integer, HashSet<Candidate>> entry = tiedCandidatesByVoteIterator.next();
 			HashSet<Candidate> candidatesByVoteCount = entry.getValue();
 			

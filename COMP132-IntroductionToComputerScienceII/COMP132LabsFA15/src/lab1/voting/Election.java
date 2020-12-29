@@ -8,19 +8,16 @@ import lab1.voting.Candidate.Party;
 public class Election {
 	public static void main(String args[]) {
 		Ballot djBallot = setup();
-
-		Ballot.printTiedCandidates(djBallot);
-
-		boolean voteCasted = false;
+		boolean done = false;
 		Scanner scr = new Scanner(System.in);
 		
 		printVotingOptions();
 		
-		while (!voteCasted) {
+		while (!done) {
 			String input = scr.nextLine();
 			
 			if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit")) {
-				voteCasted = true;
+				done = true;
 			}
 			
 			else { 
@@ -37,7 +34,7 @@ public class Election {
 						
 						if (candidate.getName().equals(candidateName)) {
 							djBallot.voteForCandidate(candidateName);
-							voteCasted = true;
+							done = true;
 							
 							System.out.println();
 							System.out.println("You voted for " + candidate.getName());
@@ -49,8 +46,7 @@ public class Election {
 						System.out.println();
 						System.err.println("\"" + candidateName + "\"" + " is not a valid candidate.");
 						printVotingOptions();
-					}
-					
+					}	
 				}
 				
 				// straight ticket vote
@@ -67,10 +63,9 @@ public class Election {
 						
 						if (politicalAffilication.contains(partyToVoteFor)) {
 							djBallot.voteStraightTicket(partyToVoteFor);
-							
-							voteCasted = true;
-							
 							Ballot.printBallotSummary(djBallot, partyToVoteFor);
+							
+							done = true;
 						}
 						
 					} catch (IllegalArgumentException iae) {
@@ -78,6 +73,11 @@ public class Election {
 						System.err.println("\"" + party + "\"" + " is not a valid party.");
 						printVotingOptions();
 					}
+				}
+
+				else if(input.equals("t") || input.equals("tie")) {
+					Ballot.printTiedCandidates(djBallot);
+					printVotingOptions();
 				}
 				
 				else {
@@ -106,6 +106,7 @@ public class Election {
 	}
 
 	private static void printVotingOptions() {
-		System.out.print("Please specify if you want to vote by (c)andidate name, (p)arty affiliation, or (e)xit: ");
+		System.out.println();
+		System.out.print("Please specify if you want to vote by (c)andidate name, (p)arty affiliation, view candidates with (t)ie votes, or (e)xit: ");
 	}
 }

@@ -66,4 +66,26 @@ public class BallotTest {
 		assertEquals(1, sarah.getNumVotes());
 		assertEquals(1, jack.getNumVotes());
 	}
+
+	@Test
+	public void getWinnerNoCandidates(){
+		Ballot ballot = new Ballot("Ballot");
+		assertEquals(null, ballot.getWinner(ballot));
+	}
+
+	@Test
+	public void getWinnerOneCandidate(){
+		Ballot ballot = new Ballot("Ballot");
+		Candidate jack =  new Candidate("Jack", Candidate.Party.LIBERTARIAN);
+		ballot.addCandidate(jack);
+
+		assertEquals(jack, ballot.getWinner(ballot));
+	}
+
+	@Test
+	public void getWinner(){
+		sarah.increaseVoteByOne();
+
+		assertEquals(sarah, ballot.getWinner(ballot));
+	}
 }
