@@ -1,9 +1,21 @@
 package lab2.minesweeper;
 
-import javax.swing.*;
-
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.*;
+
 import java.awt.event.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class MineSweeper {
 
@@ -12,10 +24,8 @@ public class MineSweeper {
 
     private static JFrame window;
 
-    private static final ImageIcon EMPTY_ICON = new ImageIcon(MineSweeper.class
-            .getResource("icons/empty.jpg"));
-    private static final ImageIcon FLAG_ICON = new ImageIcon(MineSweeper.class
-            .getResource("icons/flag.jpg"));
+    private static final ImageIcon EMPTY_ICON = new ImageIcon(MineSweeper.class.getResource("icons/empty.jpg"));
+    private static final ImageIcon FLAG_ICON = new ImageIcon(MineSweeper.class.getResource("icons/flag.jpg"));
 
     private static MineSweeperBoard theBoard;
     private static MineSweeperPanel thePanel;
@@ -368,16 +378,11 @@ public class MineSweeper {
 
         private static final long serialVersionUID = 1L;
 
-        private static final ImageIcon EMPTY_ICON = new ImageIcon(MineSweeper.class
-                .getResource("icons/empty.jpg"));
-        private static final ImageIcon MINE_ICON = new ImageIcon(MineSweeper.class
-                .getResource("icons/mine.jpg"));
-        private static final ImageIcon HIT_MINE_ICON = new ImageIcon(MineSweeper.class
-                .getResource("icons/hitMine.jpg"));
-        private static final ImageIcon WRONG_MINE_ICON = new ImageIcon(MineSweeper.class
-                .getResource("icons/wrongMine.jpg"));
-        private static final ImageIcon FLAG_ICON = new ImageIcon(MineSweeper.class
-                .getResource("icons/flag.jpg"));
+        private static final ImageIcon EMPTY_ICON = new ImageIcon(MineSweeper.class.getResource("icons/empty.jpg"));
+        private static final ImageIcon MINE_ICON = new ImageIcon(MineSweeper.class.getResource("icons/mine.jpg"));
+        private static final ImageIcon HIT_MINE_ICON = new ImageIcon(MineSweeper.class.getResource("icons/hitMine.jpg"));
+        private static final ImageIcon WRONG_MINE_ICON = new ImageIcon(MineSweeper.class.getResource("icons/wrongMine.jpg"));
+        private static final ImageIcon FLAG_ICON = new ImageIcon(MineSweeper.class.getResource("icons/flag.jpg"));
 
         private static final ImageIcon[] NUMBER_ICONS = new ImageIcon[9];
         static {

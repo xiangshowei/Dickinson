@@ -26,37 +26,39 @@ public class MineSweeperBoard {
 	 * which does not contains a mine, has not been flagged and has not yet been
 	 * uncovered.
 	 */
-	public static final int COVERED_CELL = -1;
+	protected static final int COVERED_CELL = -1;
 
 	/**
-	 * A constant value representing a a cell that has not been uncovered yet
+	 * A constant value representing a cell that has not been uncovered yet
 	 * but contains a mine.
 	 */
-	public static final int MINE = -2;
+	protected static final int MINE = -2;
 
 	/**
 	 * A constant value representing a cell which does not contain a mine but
 	 * has had a flag placed on it.
 	 */
-	public static final int FLAG = -3;
+	protected static final int FLAG = -3;
 
 	/**
 	 * A constant value representing a cell which contains a mine and has had a
 	 * flag placed on it.
 	 */
-	public static final int FLAGGED_MINE = -4;
+	protected static final int FLAGGED_MINE = -4;
 
 	/**
 	 * A constant value representing a cell containing a mine that has been
 	 * uncovered.
 	 */
-	public static final int UNCOVERED_MINE = -5;
+	protected static final int UNCOVERED_MINE = -5;
 
 	/**
 	 * A constant value representing the contents of an invalid cell. This value
 	 * is returned by the getCell method when an invalid cell is specified.
 	 */
-	public static final int INVALID_CELL = -10;
+	protected static final int INVALID_CELL = -10;
+
+	private static final int DEFAULT_LEVEL = 0;
 
 	/**
 	 * A constant value representing the easiest level of play.
@@ -73,32 +75,41 @@ public class MineSweeperBoard {
 	 */
 	public static final int EXPERT_LEVEL = 3;
 
+	private static final int DEFAULT_BOARD_ROWS = 3;
+	private static final int DEFAULT_BOARD_COLUMNS = 4;
+
+	private static final int BEGINNER_BOARD_ROWS = 5;
+	private static final int BEGINNER_BOARD_COLUMNS = 10;
+	
+	private static final int INTERMEDIATE_BOARD_ROWS = 10;
+	private static final int INTERMEDIATE_BOARD_COLUMNS = 15;
+
+	private static final int EXPERT_BOARD_ROWS = 15;
+	private static final int EXPERT_BOARD_COLUMNS = 20;
+
+	private static final int DEFAULT_BOARD_NUM_MINES = 2;
+	private static final int BEGINNER_BOARD_NUM_MINES = 3;
+	private static final int INTERMEDIATE_BOARD_NUM_MINES = 15;
+	private static final int EXPERT_BOARD_NUM_MINES = 45;
+
 	/**
 	 * Construct a new fixed MineSweeperBoard for testing purposes. The board
 	 * should have 3 rows and 4 columns. All cells should contain COVERED_CELL,
-	 * except that locations (0, 0) and (2, 1) should contain MINE.
+	 * except 2 locations contain a MINE.
 	 */
 	public MineSweeperBoard() {
-		msb = new int[3][4];
-
-		//covering up the cells on the board
-		for(int row = 0; row < msb.length; row++){
-			for(int col = 0; col < msb[row].length; col++) {
-				msb[row][col] = COVERED_CELL; 
-			} //end for loop for columns
-		}// end for loop for rows
-
-		//setting the mines AKA the trap cards
-		msb[0][0] = MINE;
-		msb[2][1] = MINE;
+		int[][] defaultBoard = createBoard(DEFAULT_LEVEL);
+		coverBoard(defaultBoard);
+		placeMines(defaultBoard, DEFAULT_LEVEL);
 	}
 
 	/**
-	 * Construct a new MineSweeperBoard for play at the specified level. The
-	 * size of the board and the number of mines are determined by the level of
-	 * play. Valid levels of play are indicated by the constants BEGINNER_LEVEL,
-	 * INTERMEDIATE_LEVEL and EXPERT_LEVEL. If an invalid level of play is
-	 * specified the new MineSweeperBoard should be created at the
+	 * Construct a new MineSweeperBoard for play at the specified level. 
+	 * The size of the board and the number of mines are determined by the level of play. 
+	 * Valid levels of play are indicated by the constants
+	 * BEGINNER_LEVEL, INTERMEDIATE_LEVEL and EXPERT_LEVEL. 
+	 * 
+	 * If an invalid level of play is specified, the new MineSweeperBoard should be created at the
 	 * BEGINNER_LEVEL. The size of the board and the number of cells which
 	 * contain mines is as follows:
 	 * 
@@ -113,156 +124,107 @@ public class MineSweeperBoard {
 	 * @param level the level of play.
 	 */
 	public MineSweeperBoard(int level) {
-		Random rnd = new Random();
-
-		//number of mines that will be on the board
-		int boardMines = 0;
-
-		//random locations of the mines
-		int x1 = 0; //for rows
-		int y1 = 0; //for columns
-
-		int x2 = 0;
-		int y2 = 0;
-
-		//size of the board
-		//    	int rows = 0;
-		//    	int cols = 0;
-
 		if(level < BEGINNER_LEVEL || level > EXPERT_LEVEL){
 			level = BEGINNER_LEVEL;
 		}
 
 		if (level == BEGINNER_LEVEL){
-			msb = new int [5][10];
-
-			boardMines = 3;
-
-			//covering the board
-			for(int row = 0; row < msb.length; row++){
-				for(int col = 0; col < msb[row].length; col++) {
-					msb[row][col] = COVERED_CELL;
-				}
-			}
-
-			//setting the mines
-			for(int i = 0; i < boardMines; i++) {
-				x1 = rnd.nextInt(5);
-				y1 = rnd.nextInt(10);
-
-				//if there does NOT exist a mine @ (x1,y1), put one there
-				if(msb[x1][y1] != MINE){
-					msb[x1][y1] = MINE;
-				}//end if statement
-				else {//there already exists a mine @ (x1,y1) 
-					//get new random values
-					x2 = rnd.nextInt(5);
-					y2 = rnd.nextInt(10);
-					while(msb[x2][y2] != MINE){
-						//if x1 =x2, y1=y2; there's a mine at the newly generated locations
-						if(getCell(x2,y2) == getCell(x1,y1))
-						msb[x2][y2] = MINE;
-					}
-				}
-			}//end for loop
-
-		} // end of set up for BEGINNER_LEVEL
+			int[][] beginnerBoard = createBoard(BEGINNER_LEVEL);
+			coverBoard(beginnerBoard);
+			placeMines(beginnerBoard, BEGINNER_LEVEL);
+		}
 
 		else if (level == INTERMEDIATE_LEVEL){
-			msb = new int [10][15];
-
-			boardMines = 15;
-
-			//covering the board
-			for(int row = 0; row < msb.length; row++){
-				for(int col = 0; col < msb[row].length; col++) {
-					msb[row][col] = COVERED_CELL;
-				}
-			}
-
-			//setting the mines
-			for(int i = 0; i < boardMines; i++) {
-				x1 = rnd.nextInt(10);
-				y1 = rnd.nextInt(15);
-
-				//if there does NOT exist a mine @ (x,y), put one there
-				if(msb[x1][y1] != MINE){
-					msb[x1][y1] = MINE;
-				}//end if statement
-			}//end for loop
-
-		}// end of set up for INTERMEDIATE_LEVEL
+			int[][] intermedidateBoard = createBoard(INTERMEDIATE_LEVEL);
+			coverBoard(intermedidateBoard);
+			placeMines(intermedidateBoard, INTERMEDIATE_LEVEL);
+		}
 
 		else if (level == EXPERT_LEVEL){
-			msb = new int [15][20];
+			int[][] expertBoard = createBoard(EXPERT_LEVEL);
+			coverBoard(expertBoard);
+			placeMines(expertBoard, EXPERT_LEVEL);
+		}
+	}
 
-			boardMines = 45;
+	private int[][] createBoard(int level) {
+		if(level == DEFAULT_LEVEL) {
+			msb = new int[DEFAULT_BOARD_ROWS][DEFAULT_BOARD_COLUMNS];
+		}
 
-			//covering the board
-			for(int row = 0; row < msb.length; row++){
-				for(int col = 0; col < msb[row].length; col++) {
-					msb[row][col] = COVERED_CELL;
-				}
+		else if (level == BEGINNER_LEVEL){
+			msb = new int[BEGINNER_BOARD_ROWS][BEGINNER_BOARD_COLUMNS];
+		}
+
+		else if (level == INTERMEDIATE_LEVEL){
+			msb = new int[INTERMEDIATE_BOARD_ROWS][INTERMEDIATE_BOARD_COLUMNS];
+		}
+		
+		else if (level == EXPERT_LEVEL){
+			msb = new int[EXPERT_BOARD_ROWS][EXPERT_BOARD_COLUMNS];
+		}
+
+		return msb;
+	}
+	
+
+	private void coverBoard(int[][] board) {
+		for(int row = 0; row < board.length; row++){
+			for(int col = 0; col < board[row].length; col++) {
+				board[row][col] = COVERED_CELL;
 			}
+		}
+	}
 
-			//setting the mines
-			for(int i = 0; i < boardMines; i++) {
-				x1 = rnd.nextInt(15);
-				y1 = rnd.nextInt(20);
+	private int placeMineIfNotExist(int[][] board, int x, int y, int numExistingMines) {
+		int numMinesPlaced = numExistingMines;
 
-				//if there does NOT exist a mine @ (x,y), put one there
-				if(getCell(x1,y1) != MINE){
-					msb[x1][y1] = MINE;
-				}//end if statement
+		if(board[x][y] != MINE) {
+			board[x][y] = MINE;
+			numMinesPlaced++;
+		}
 
-				else {//there already exists a mine @ (x,y) 
-										
-					//get new random numbers
-					x2 = rnd.nextInt(15);
-					y2 = rnd.nextInt(20);
+		return numMinesPlaced;
+	}
 
-					//while we're on the board and it's not a mine
-//				while(getCell(x2, y2) != INVALID_CELL && getCell(x2, y2) != MINE){
-					for(int row = 0; row < msb.length; row++){
-						for(int col = 0; col < msb[row].length; col++) {
-							//on the board
-							if((getCell(row, col) != INVALID_CELL && getCell(row, col) != MINE)) {
-								//if the second set of random numbers are not as those in the first set
-								//and the new random location does NOT have a mine there, put one there
-								while( (x1 != x2 && x1 != y1 && x1 != y2 && y1 != y2 )  &&
-										(getCell(x2, y2) != getCell(x1, y1))  && 
-										(getCell(x2, y2) != MINE && getCell(x1, y1) == MINE) ) {
-									msb[x2][y2] = MINE;
-								} //end while loop
-							} // end if statement
-						} //end for loop for columns
-					} // end for loop for rows
-					
-				
+	private void placeMines(int[][] board, int level) {
+		Random rnd = new Random();
+		int numMinesPlaced = 0;
+		int mineXCoordinate = 0;
+		int mineYCoordinate = 0;
 
-				} // end else to the initial if statement
+		if(level == DEFAULT_LEVEL) {
+			while(numMinesPlaced < DEFAULT_BOARD_NUM_MINES) {
+				mineXCoordinate = rnd.nextInt(DEFAULT_BOARD_ROWS);
+				mineYCoordinate = rnd.nextInt(DEFAULT_BOARD_COLUMNS);
+				numMinesPlaced = placeMineIfNotExist(board, mineXCoordinate, mineYCoordinate, numMinesPlaced);
+			}
+		}
 
-			} //end for loop before there are anything on the board
-			
-		}// end of set up for EXPERT_LEVEL
-	} //end second constructor
+		else if(level == BEGINNER_LEVEL) {
+			while(numMinesPlaced < BEGINNER_BOARD_NUM_MINES) {
+				mineXCoordinate = rnd.nextInt(BEGINNER_BOARD_ROWS);
+				mineYCoordinate = rnd.nextInt(BEGINNER_BOARD_COLUMNS);
+				numMinesPlaced = placeMineIfNotExist(board, mineXCoordinate, mineYCoordinate, numMinesPlaced);
+			}
+		}
 
+		else if(level == INTERMEDIATE_LEVEL) {
+			while(numMinesPlaced < INTERMEDIATE_BOARD_NUM_MINES) {
+				mineXCoordinate = rnd.nextInt(INTERMEDIATE_BOARD_ROWS);
+				mineYCoordinate = rnd.nextInt(INTERMEDIATE_BOARD_COLUMNS);
+				numMinesPlaced = placeMineIfNotExist(board, mineXCoordinate, mineYCoordinate, numMinesPlaced);		
+			}
+		}
 
-	//		for(int row = 0; row < msb.length; row++){
-	//			for(int col = 0; col < msb[row].length; col++) {
-	//				msb[row][col] = COVERED_CELL;
-	//			}
-	//		}
-	//
-	//		//setting the mines
-	//		for(int i = 0; i < boardMines; i++) {
-	//			x = rnd.nextInt(rows);
-	//			y = rnd.nextInt(cols);
-	//			if(msb[x][y] != MINE){
-	//				msb[x][y] = MINE;
-	//			}
-	//		}
-
+		else if(level == EXPERT_LEVEL) {
+			while(numMinesPlaced < EXPERT_BOARD_NUM_MINES) {
+				mineXCoordinate = rnd.nextInt(EXPERT_BOARD_ROWS);
+				mineYCoordinate = rnd.nextInt(EXPERT_BOARD_COLUMNS);
+				numMinesPlaced = placeMineIfNotExist(board, mineXCoordinate, mineYCoordinate, numMinesPlaced);			
+			}
+		}
+	}
 
 	/**
 	 * Get the number of rows in this MineSweeperBoard.
@@ -297,9 +259,9 @@ public class MineSweeperBoard {
 			for(int col = 0; col < msb[row].length; col++) {
 				if(msb[row][col] == MineSweeperBoard.MINE) {
 					numMines++;
-				}// end if statement
-			} //end for loop for columns
-		}// end for loop for rows
+				}
+			}
+		}
 
 		return numMines;
 	}
@@ -341,9 +303,9 @@ public class MineSweeperBoard {
 				if(getCell(row + rows, col + cols) == MINE || getCell(row + rows, col + cols) == FLAGGED_MINE 
 						|| getCell(row + rows, col + cols) == UNCOVERED_MINE) {
 					numMines++;
-				}//end if statement
-			} //end for loop for columns
-		} // end for loop for rows
+				}
+			}
+		}
 
 		return numMines;
 	}
