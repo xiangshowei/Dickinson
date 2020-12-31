@@ -112,7 +112,7 @@ public class MineSweeper {
          * having done anything but the default constructor and a few accessors.
          */
         try {
-            theBoard.getRows();
+            theBoard.getNumRows();
         }
         catch (NullPointerException e) {
             theBoard = new MineSweeperBoard();
@@ -280,8 +280,8 @@ public class MineSweeper {
 
             theBoard = b;
 
-            int rows = b.getRows();
-            int cols = b.getColumns();
+            int rows = b.getNumRows();
+            int cols = b.getNumColumns();
 
             setLayout(new GridLayout(rows, cols));
             for (int r = 0; r < rows; r++) {

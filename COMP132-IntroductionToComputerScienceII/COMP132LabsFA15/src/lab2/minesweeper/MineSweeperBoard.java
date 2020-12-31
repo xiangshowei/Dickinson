@@ -90,10 +90,10 @@ public class MineSweeperBoard {
 	protected static final int EXPERT_BOARD_ROWS = 15;
 	protected static final int EXPERT_BOARD_COLUMNS = 20;
 
-	private static final int DEFAULT_BOARD_NUM_MINES = 2;
-	private static final int BEGINNER_BOARD_NUM_MINES = 3;
-	private static final int INTERMEDIATE_BOARD_NUM_MINES = 15;
-	private static final int EXPERT_BOARD_NUM_MINES = 45;
+	protected static final int DEFAULT_BOARD_NUM_MINES = 2;
+	protected static final int BEGINNER_BOARD_NUM_MINES = 3;
+	protected static final int INTERMEDIATE_BOARD_NUM_MINES = 15;
+	protected static final int EXPERT_BOARD_NUM_MINES = 45;
 
 	/**
 	 * Construct a new fixed MineSweeperBoard for testing purposes. The board should
@@ -222,7 +222,7 @@ public class MineSweeperBoard {
 						String.valueOf(mineXCoordinate) + "," + String.valueOf(mineYCoordinate));
 
 				// place mine if one didn't exist
-				if (board[mineXCoordinate][mineYCoordinate] != MINE) {
+				if (board[mineXCoordinate][mineYCoordinate] == COVERED_CELL) {
 					board[mineXCoordinate][mineYCoordinate] = MINE;
 					numMinesPlaced++;
 				}
@@ -239,7 +239,7 @@ public class MineSweeperBoard {
 	 * 
 	 * @return the number of rows in this MineSweeperBoard.
 	 */
-	public int getRows() {
+	public int getNumRows() {
 		return msb.length;
 	}
 
@@ -248,7 +248,7 @@ public class MineSweeperBoard {
 	 * 
 	 * @return the number of columns in this MineSweeperBoard.
 	 */
-	public int getColumns() {
+	public int getNumColumns() {
 		return msb[0].length;
 	}
 
@@ -270,9 +270,8 @@ public class MineSweeperBoard {
 	 *         INVALID_CELL if the specified cell is not on the board.
 	 */
 	public int getCell(int row, int col) {
-		// checking negative indices and indices that exceed the board's row and/or
-		// column size
-		if (row < 0 || col < 0 || row > (getRows() - 1) || col > (getColumns() - 1)) {
+		// checking indices that exceed the board's dimensions
+		if (row < 0 || col < 0 || row > (getNumRows() - 1) || col > (getNumColumns() - 1)) {
 			return INVALID_CELL;
 		}
 
@@ -335,16 +334,18 @@ public class MineSweeperBoard {
 	public void uncoverCell(int row, int col) {
 		int cell = getCell(row, col);
 
-		if (cell != INVALID_CELL || cell >= 0 || cell != FLAGGED_CELL || cell != FLAGGED_MINE) {
-			if (cell == MINE) {
+		// only check cells that have not been uncovered
+		if (cell >= 0 || cell != UNCOVERED_MINE) {
+			if (cell != INVALID_CELL || cell != FLAGGED_CELL || cell != FLAGGED_MINE) {
+				if (cell == MINE) {
 
-				// uncovering a mine
-				msb[row][col] = UNCOVERED_MINE;
-			}
+					msb[row][col] = UNCOVERED_MINE;
+				}
 
-			// marking the cell with number of adjacent mines
-			else {
-				msb[row][col] = getNumAdjacentMines(row, col);
+				// mark the cell with number of adjacent mines
+				else {
+					msb[row][col] = getNumAdjacentMines(row, col);
+				}
 			}
 		}
 	}
@@ -361,25 +362,28 @@ public class MineSweeperBoard {
 	public void flagCell(int row, int col) {
 		int cell = getCell(row, col);
 
-		if (cell >= 0 || cell != INVALID_CELL) {
-			// flag non-mine covered cell
-			if (cell == COVERED_CELL) {
-				msb[row][col] = FLAGGED_CELL;
-			}
+		// only check cells that have not been uncovered
+		if (cell >= 0 || cell != UNCOVERED_MINE) {
+			if (cell != INVALID_CELL) {
+				// flag non-mine covered cell
+				if (cell == COVERED_CELL) {
+					msb[row][col] = FLAGGED_CELL;
+				}
 
-			// flag a mine
-			else if (cell == MINE) {
-				msb[row][col] = FLAGGED_MINE;
-			}
+				// flag a mine
+				else if (cell == MINE) {
+					msb[row][col] = FLAGGED_MINE;
+				}
 
-			// if the cell is already flagged, return it to a covered cell
-			else if (cell == FLAGGED_CELL) {
-				msb[row][col] = COVERED_CELL;
-			}
+				// if the cell is already flagged, return it to a covered cell
+				else if (cell == FLAGGED_CELL) {
+					msb[row][col] = COVERED_CELL;
+				}
 
-			// return the flagged mine to a mine
-			else if (cell == FLAGGED_MINE) {
-				msb[row][col] = MINE;
+				// return the flagged mine to a mine
+				else if (cell == FLAGGED_MINE) {
+					msb[row][col] = MINE;
+				}
 			}
 		}
 	}

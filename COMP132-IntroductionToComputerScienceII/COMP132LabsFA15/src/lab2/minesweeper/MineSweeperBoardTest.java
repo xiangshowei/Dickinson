@@ -22,11 +22,11 @@ public class MineSweeperBoardTest {
 	@Test
 	public void testContructorDefaultLevelBoard() {
 		assertEquals(MineSweeperBoard.DEFAULT_LEVEL, msb.getDifficultyLevel());
-		assertEquals(3, msb.getRows());
-		assertEquals(4, msb.getColumns());
-		assertEquals(2, msb.getNumMines());
+		assertEquals(MineSweeperBoard.DEFAULT_BOARD_ROWS, msb.getNumRows());
+		assertEquals(MineSweeperBoard.DEFAULT_BOARD_COLUMNS, msb.getNumColumns());
+		assertEquals(MineSweeperBoard.DEFAULT_BOARD_NUM_MINES, msb.getNumMines());
 
-		testMineLocations(MineSweeperBoard.DEFAULT_LEVEL);
+		testMineLocations(MineSweeperBoard.DEFAULT_LEVEL, msb);
 	}
 
 	@Test
@@ -34,53 +34,53 @@ public class MineSweeperBoardTest {
 		//level higher than allowed max level
 		MineSweeperBoard msb1 = new MineSweeperBoard(5);
 		assertEquals(MineSweeperBoard.BEGINNER_LEVEL, msb1.getDifficultyLevel());
-		assertEquals(5, msb1.getRows());
-		assertEquals(10, msb1.getColumns());
-		assertEquals(3, msb1.getNumMines());
+		assertEquals(MineSweeperBoard.BEGINNER_BOARD_ROWS, msb1.getNumRows());
+		assertEquals(MineSweeperBoard.BEGINNER_BOARD_COLUMNS, msb1.getNumColumns());
+		assertEquals(MineSweeperBoard.BEGINNER_BOARD_NUM_MINES, msb1.getNumMines());
 
-		testMineLocations(MineSweeperBoard.BEGINNER_LEVEL);
+		testMineLocations(MineSweeperBoard.BEGINNER_LEVEL, msb1) ;
 
 		//level lower than allowed min level
 		MineSweeperBoard msb2 = new MineSweeperBoard(0);
 		assertEquals(MineSweeperBoard.BEGINNER_LEVEL, msb2.getDifficultyLevel());
-		assertEquals(5, msb2.getRows());
-		assertEquals(10, msb2.getColumns());
-		assertEquals(3, msb2.getNumMines());	
+		assertEquals(MineSweeperBoard.BEGINNER_BOARD_ROWS, msb2.getNumRows());
+		assertEquals(MineSweeperBoard.BEGINNER_BOARD_COLUMNS, msb2.getNumColumns());
+		assertEquals(MineSweeperBoard.BEGINNER_BOARD_NUM_MINES, msb2.getNumMines());
 
-		testMineLocations(MineSweeperBoard.BEGINNER_LEVEL);
+		testMineLocations(MineSweeperBoard.BEGINNER_LEVEL, msb2);
 	}
 
 	@Test
 	public void testContructorBeginnerLevel() { 
 		MineSweeperBoard msb3 = new MineSweeperBoard(MineSweeperBoard.BEGINNER_LEVEL);
 		assertEquals(MineSweeperBoard.BEGINNER_LEVEL, msb3.getDifficultyLevel());
-		assertEquals(5, msb3.getRows());
-		assertEquals(10, msb3.getColumns());
-		assertEquals(3, msb3.getNumMines());
+		assertEquals(MineSweeperBoard.BEGINNER_BOARD_ROWS, msb3.getNumRows());
+		assertEquals(MineSweeperBoard.BEGINNER_BOARD_COLUMNS, msb3.getNumColumns());
+		assertEquals(MineSweeperBoard.BEGINNER_BOARD_NUM_MINES, msb3.getNumMines());
 
-		testMineLocations(MineSweeperBoard.BEGINNER_LEVEL);
+		testMineLocations(MineSweeperBoard.BEGINNER_LEVEL, msb3);
 	}
 
 	@Test
 	public void testContructorIntermediateLevel() {
 		MineSweeperBoard msb4 = new MineSweeperBoard(MineSweeperBoard.INTERMEDIATE_LEVEL);
 		assertEquals(MineSweeperBoard.INTERMEDIATE_LEVEL, msb4.getDifficultyLevel());
-		assertEquals(10, msb4.getRows());
-		assertEquals(15, msb4.getColumns());
-		assertEquals(15, msb4.getNumMines());
+		assertEquals(MineSweeperBoard.INTERMEDIATE_BOARD_ROWS, msb4.getNumRows());
+		assertEquals(MineSweeperBoard.INTERMEDIATE_BOARD_COLUMNS, msb4.getNumColumns());
+		assertEquals(MineSweeperBoard.INTERMEDIATE_BOARD_NUM_MINES, msb4.getNumMines());
 
-		testMineLocations(MineSweeperBoard.INTERMEDIATE_LEVEL);
+		testMineLocations(MineSweeperBoard.INTERMEDIATE_LEVEL, msb4);
 	}
 
 	@Test
 	public void testContructorExpertLevel() {
 		MineSweeperBoard msb5 = new MineSweeperBoard(MineSweeperBoard.EXPERT_LEVEL);
 		assertEquals(MineSweeperBoard.EXPERT_LEVEL, msb5.getDifficultyLevel());
-		assertEquals(15, msb5.getRows());
-		assertEquals(20, msb5.getColumns());
-		assertEquals(45, msb5.getNumMines());
+		assertEquals(MineSweeperBoard.EXPERT_BOARD_ROWS, msb5.getNumRows());
+		assertEquals(MineSweeperBoard.EXPERT_BOARD_COLUMNS, msb5.getNumColumns());
+		assertEquals(MineSweeperBoard.EXPERT_BOARD_NUM_MINES, msb5.getNumMines());
 
-		testMineLocations(MineSweeperBoard.EXPERT_LEVEL);
+		testMineLocations(MineSweeperBoard.EXPERT_LEVEL, msb5);
 	}
 
 	@Test
@@ -128,25 +128,26 @@ public class MineSweeperBoardTest {
 	}
 
 	@Test
-	public void testUncoverCell() {  
-		//testing regular cells
+	public void testUncoverCellRegularCells() {  
 		msb.uncoverCell(0, 1);
-		assertEquals(1, msb.getCell(0, 1));
+		assertEquals(msb.getNumAdjacentMines(0, 1), msb.getCell(0, 1));
 		msb.uncoverCell(2, 0);
-		assertEquals(1, msb.getCell(2, 0));
+		assertEquals(msb.getNumAdjacentMines(2, 0), msb.getCell(2, 0));
 		msb.uncoverCell(1, 1);
-		assertEquals(2, msb.getCell(1, 1));
-
-		//testing the mines
+		assertEquals(msb.getNumAdjacentMines(1, 1), msb.getCell(1, 1));
+	}
+	
+	@Test
+	public void testUncoverCellMines() {
 		assertEquals(MineSweeperBoard.MINE, msb.getCell(0, 0));
 		msb.uncoverCell(0, 0);
 		assertEquals(MineSweeperBoard.UNCOVERED_MINE, msb.getCell(0, 0));
 		assertEquals(0, msb.getNumAdjacentMines(0, 0));
 
-		assertEquals(MineSweeperBoard.MINE, msb.getCell(2, 1));
-		msb.uncoverCell(2, 1);
-		assertEquals(MineSweeperBoard.UNCOVERED_MINE, msb.getCell(2, 1));
-		assertEquals(0, msb.getNumAdjacentMines(2, 1));
+		//uncovering an uncovered mine should not change the board
+		msb.uncoverCell(0, 0);
+		assertEquals(MineSweeperBoard.UNCOVERED_MINE, msb.getCell(0, 0));
+		assertEquals(0, msb.getNumAdjacentMines(0, 0));
 	}
 
 	@Test
@@ -171,6 +172,27 @@ public class MineSweeperBoardTest {
 	}
 
 	@Test
+	public void testFlagCellUncoveredCells() {
+		//mine
+		assertEquals(MineSweeperBoard.MINE, msb.getCell(0, 0));
+		msb.uncoverCell(0, 0);
+		assertEquals(MineSweeperBoard.UNCOVERED_MINE, msb.getCell(0, 0));
+
+		//uncovering an uncovered mine should not change the board
+		msb.flagCell(0, 0);
+		assertEquals(MineSweeperBoard.UNCOVERED_MINE, msb.getCell(0, 0));
+
+		//regular cell
+		assertEquals(MineSweeperBoard.COVERED_CELL, msb.getCell(0, 3));
+		msb.uncoverCell(0, 3);
+		assertEquals(msb.getNumAdjacentMines(0, 3), msb.getCell(0, 3));
+
+		//uncovering an uncovered cell should not change the board
+		msb.flagCell(0, 3);
+		assertEquals(msb.getNumAdjacentMines(0, 3), msb.getCell(0, 3));
+	}	
+
+	@Test
 	public void testRevealBoard() {
 		msb.revealBoard();
 
@@ -179,11 +201,11 @@ public class MineSweeperBoardTest {
 		assertEquals(MineSweeperBoard.UNCOVERED_MINE, msb.getCell(2, 1));
 
 		//testing the other cells
-		assertEquals(0, msb.getCell(0, 3));
-		assertEquals(2, msb.getCell(1, 1));
-		assertEquals(1, msb.getCell(2, 2));
-		assertEquals(1, msb.getCell(0, 1));
-		assertEquals(1, msb.getCell(2, 0));
+		assertEquals(msb.getNumAdjacentMines(0, 3), msb.getCell(0, 3));
+		assertEquals(msb.getNumAdjacentMines(1, 1), msb.getCell(1, 1));
+		assertEquals(msb.getNumAdjacentMines(2, 2), msb.getCell(2, 2));
+		assertEquals(msb.getNumAdjacentMines(0, 1), msb.getCell(0, 1));
+		assertEquals(msb.getNumAdjacentMines(2, 0), msb.getCell(2, 0));
 	}
 
 	@Test
@@ -204,7 +226,7 @@ public class MineSweeperBoardTest {
 		// assertEquals(true, msb.gameWon());
 	}
 
-	private void testMineLocations(int level) {
+	private void testMineLocations(int level, MineSweeperBoard msb) {
 		String[] mineLocations = msb.getMineLocations();
 		int mineXCoordinate = 0;
 		int mineYCoordinate = 0;
