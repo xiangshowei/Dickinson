@@ -307,7 +307,7 @@ public class MineSweeper {
         public void mouseClicked(MouseEvent e) {
 
             try {
-                if (theBoard.gameLost() || theBoard.gameWon()) {
+                if (theBoard.hasUncoveredMine() || theBoard.gameWon()) {
                     MineSweeper.reStartGameOnClick();
                 }
                 else {
@@ -348,7 +348,7 @@ public class MineSweeper {
                     if (theBoard.gameWon()) {
                         MineSweeper.gameWasWon();
                     }
-                    else if (theBoard.gameLost()) {
+                    else if (theBoard.hasUncoveredMine()) {
                         MineSweeper.gameWasLost();
                     }
                 }
@@ -427,7 +427,7 @@ public class MineSweeper {
             case MineSweeperBoard.MINE:
                 curIcon = EMPTY_ICON;
                 break;
-            case MineSweeperBoard.FLAG:
+            case MineSweeperBoard.FLAGGED_CELL:
                 curIcon = FLAG_ICON;
                 break;
             case MineSweeperBoard.FLAGGED_MINE:
@@ -456,7 +456,7 @@ public class MineSweeper {
             case MineSweeperBoard.MINE:
                 curIcon = MINE_ICON;
                 break;
-            case MineSweeperBoard.FLAG:
+            case MineSweeperBoard.FLAGGED_CELL:
                 curIcon = WRONG_MINE_ICON;
                 break;
             case MineSweeperBoard.FLAGGED_MINE:
