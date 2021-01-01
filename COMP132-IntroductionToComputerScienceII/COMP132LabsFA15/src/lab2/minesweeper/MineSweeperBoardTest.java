@@ -1,11 +1,13 @@
 package lab2.minesweeper;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.awt.Point;
+import java.util.HashSet;
 
-import org.junit.Before;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class MineSweeperBoardTest {
@@ -194,7 +196,7 @@ public class MineSweeperBoardTest {
 		msb.uncoverCell(0, 0);
 		assertEquals(MineSweeperBoard.UNCOVERED_MINE, msb.getCell(0, 0));
 
-		// "uncovering" an already uncovered mine should not change the board
+		// flagging an already uncovered mine should not change the board
 		msb.flagCell(0, 0);
 		assertEquals(MineSweeperBoard.UNCOVERED_MINE, msb.getCell(0, 0));
 
@@ -203,7 +205,7 @@ public class MineSweeperBoardTest {
 		msb.uncoverCell(0, 3);
 		assertEquals(msb.getNumAdjacentMines(0, 3), msb.getCell(0, 3));
 
-		// "uncovering" an already uncovered cell should not change the board
+		// flagging an already uncovered regular cell should not change the board
 		msb.flagCell(0, 3);
 		assertEquals(msb.getNumAdjacentMines(0, 3), msb.getCell(0, 3));
 	}
@@ -231,42 +233,43 @@ public class MineSweeperBoardTest {
 	}
 
 	@Test
+	// TODO: finish testing after implemention
 	public void testGameWon() {
+		fail("method implementation incomplete");
+
 		assertEquals(false, msb.hasWonGame());
 
 		msb.flagCell(0, 0);
 		msb.flagCell(2, 1);
 
-		// assertEquals(true, msb.gameWon());
+		assertEquals(true, msb.hasWonGame());
 	}
 
 	private void testMineLocations(MineSweeperBoard msb, int level) {
-		Point[] mineLocations = msb.getMineLocations();
-		int mineXCoordinate = 0;
-		int mineYCoordinate = 0;
-
+		HashSet<Point> mineLocations = msb.getMineLocations();
+		
 		if (level == MineSweeperBoard.DEFAULT_LEVEL) {
-			assertEquals(new Point(0, 0), mineLocations[0]);
-			assertEquals(new Point(2, 1), mineLocations[1]);
+			assertEquals(true, mineLocations.contains(new Point(0, 0)));
+			assertEquals(true, mineLocations.contains(new Point(2, 1)));
 		}
-
+		
 		else {
-			for (Point coordinate : mineLocations) {
+			int mineXCoordinate = 0;
+			int mineYCoordinate = 0;
+			
+			for (Point mine : mineLocations) {
 
-				mineXCoordinate = (int) coordinate.getX();
-				mineYCoordinate = (int) coordinate.getY();
+				mineXCoordinate = (int) mine.getX();
+				mineYCoordinate = (int) mine.getY();
 
 				if (level == MineSweeperBoard.BEGINNER_LEVEL) {
 					assertEquals(true, mineXCoordinate >= 0 && mineXCoordinate < MineSweeperBoard.BEGINNER_BOARD_ROWS);
-					assertEquals(true,
-							mineYCoordinate >= 0 && mineYCoordinate < MineSweeperBoard.BEGINNER_BOARD_COLUMNS);
+					assertEquals(true, mineYCoordinate >= 0 && mineYCoordinate < MineSweeperBoard.BEGINNER_BOARD_COLUMNS);
 				}
 
 				else if (level == MineSweeperBoard.INTERMEDIATE_LEVEL) {
-					assertEquals(true,
-							mineXCoordinate >= 0 && mineXCoordinate < MineSweeperBoard.INTERMEDIATE_BOARD_ROWS);
-					assertEquals(true,
-							mineYCoordinate >= 0 && mineYCoordinate < MineSweeperBoard.INTERMEDIATE_BOARD_COLUMNS);
+					assertEquals(true, mineXCoordinate >= 0 && mineXCoordinate < MineSweeperBoard.INTERMEDIATE_BOARD_ROWS);
+					assertEquals(true, mineYCoordinate >= 0 && mineYCoordinate < MineSweeperBoard.INTERMEDIATE_BOARD_COLUMNS);
 				}
 
 				else if (level == MineSweeperBoard.EXPERT_LEVEL) {

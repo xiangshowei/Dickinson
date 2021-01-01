@@ -1,8 +1,9 @@
 package lab2.minesweeper;
 
-import java.util.HashMap;
-import java.util.Random;
 import java.awt.Point;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Random;
 
 /**
  * A MineSweeperBoard holds a representation of the contents of the playing
@@ -24,7 +25,7 @@ public class MineSweeperBoard {
 	private int[][] msb;
 	private int difficultyLevel;
 	private int numMines;
-	private HashMap<Integer, Point[]> boardState;
+	private HashMap<Integer, HashSet<Point>> boardState;
 
 	/**
 	 * A constant value representing a covered cell. A covered cell is any cell
@@ -147,36 +148,30 @@ public class MineSweeperBoard {
 	}
 
 	private int[][] createBoard(int level) {
-		Point[] mineLocations = null;
-
 		if (level == DEFAULT_LEVEL) {
 			msb = new int[DEFAULT_BOARD_ROWS][DEFAULT_BOARD_COLUMNS];
-			mineLocations = new Point[DEFAULT_BOARD_NUM_MINES];
 			numMines = DEFAULT_BOARD_NUM_MINES;
 		}
-
+		
 		else if (level == BEGINNER_LEVEL) {
 			msb = new int[BEGINNER_BOARD_ROWS][BEGINNER_BOARD_COLUMNS];
-			mineLocations = new Point[BEGINNER_BOARD_NUM_MINES];
 			numMines = BEGINNER_BOARD_NUM_MINES;
 		}
-
+		
 		else if (level == INTERMEDIATE_LEVEL) {
 			msb = new int[INTERMEDIATE_BOARD_ROWS][INTERMEDIATE_BOARD_COLUMNS];
-			mineLocations = new Point[INTERMEDIATE_BOARD_NUM_MINES];
 			numMines = INTERMEDIATE_BOARD_NUM_MINES;
 		}
-
+		
 		else if (level == EXPERT_LEVEL) {
 			msb = new int[EXPERT_BOARD_ROWS][EXPERT_BOARD_COLUMNS];
-			mineLocations = new Point[EXPERT_BOARD_NUM_MINES];
 			numMines = EXPERT_BOARD_NUM_MINES;
 		}
-
+		
 		difficultyLevel = level;
-
-		boardState = new HashMap<Integer, Point[]>();
-		boardState.put(MINE, mineLocations);
+		
+		boardState = new HashMap<Integer, HashSet<Point>>();
+		boardState.put(MINE, new HashSet<Point>());
 
 		return msb;
 	}
@@ -190,13 +185,13 @@ public class MineSweeperBoard {
 	}
 
 	private void placeMines(int[][] board, int numMinesToPlace) {
-		Point[] mineLocations = boardState.get(MINE);
+		HashSet<Point> mineLocations = boardState.get(MINE);
 
 		if (difficultyLevel == DEFAULT_LEVEL) {
 			board[0][0] = MINE;
 			board[2][1] = MINE;
-			mineLocations[0] = new Point(0, 0);
-			mineLocations[1] = new Point(2, 1);
+			mineLocations.add(new Point(0, 0));
+			mineLocations.add(new Point(2, 1));	
 		}
 
 		else {
@@ -225,9 +220,10 @@ public class MineSweeperBoard {
 				if (board[mineXCoordinate][mineYCoordinate] == COVERED_CELL) {
 					board[mineXCoordinate][mineYCoordinate] = MINE;
 					
-					Point mineCoordinates = new Point(mineXCoordinate, mineYCoordinate);
 					//store mine coordinates
-					mineLocations[numMinesPlaced] = mineCoordinates;
+					Point mine = new Point(mineXCoordinate, mineYCoordinate);
+					mineLocations.add(mine);
+
 					numMinesPlaced++;
 				}
 			}
@@ -282,7 +278,7 @@ public class MineSweeperBoard {
 		return msb[row][col];
 	}
 
-	public Point[] getMineLocations() {
+	public HashSet<Point> getMineLocations() {
 		return boardState.get(MINE);
 	}
 
@@ -435,7 +431,16 @@ public class MineSweeperBoard {
 	 * @return true if the current game has been won and false otherwise.
 	 */
 	public boolean hasWonGame() {
-		return areAllMinesFlagged() && areAllNonMineCellsUncovered();
+		return areAllMinesFlagged(getMineLocations()) && areAllNonMineCellsUncovered();
+	}
+
+	// TODO: finish implementation
+	private boolean areFlagsPlacedCorrectly() {
+		//each time a cell is flagged, record in collection(hashmap)
+
+		//for each flagged cell
+			//check if the flagged cell's coordinate matches that of the mine location
+		return false;
 	}
 	
 	private boolean areAllNonMineCellsUncovered() {
@@ -452,11 +457,11 @@ public class MineSweeperBoard {
 		return true;
 	} 
 
-	private int getNumMinesFlagged() {
-		Point[] mineLocations = getMineLocations();
+	private int getNumMinesFlagged(HashSet<Point> mineLocations) {
 		int numMinesFlagged = 0;
 		
 		for (Point mine : mineLocations) {
+				
 			int mineXCoordinate = (int) mine.getX();
 			int mineYCoordinate = (int) mine.getY();
 			
@@ -468,8 +473,8 @@ public class MineSweeperBoard {
 		return numMinesFlagged;
 	}
 
-	private boolean areAllMinesFlagged() {
-		int numMinesFlagged = getNumMinesFlagged();
+	private boolean areAllMinesFlagged(HashSet<Point> mineLocations) {
+		int numMinesFlagged = getNumMinesFlagged(mineLocations);
 		boolean allMinesFlagged = false;
 		
 		if(difficultyLevel == DEFAULT_LEVEL) {
