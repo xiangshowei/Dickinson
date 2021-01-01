@@ -1,6 +1,8 @@
 package lab2.minesweeper;
 
+import java.util.HashMap;
 import java.util.Random;
+import java.awt.Point;
 
 /**
  * A MineSweeperBoard holds a representation of the contents of the playing
@@ -22,7 +24,7 @@ public class MineSweeperBoard {
 	private int[][] msb;
 	private int difficultyLevel;
 	private int numMines;
-	private String[] mineLocations;
+	private HashMap<Integer, Point[]> boardState;
 
 	/**
 	 * A constant value representing a covered cell. A covered cell is any cell
@@ -97,28 +99,22 @@ public class MineSweeperBoard {
 
 	/**
 	 * Construct a new fixed MineSweeperBoard for testing purposes. The board should
-	 * have 3 rows and 4 columns. All cells should contain a COVERED_CELL, except
-	 * that cells (0, 0) and (2, 1) should contain a MINE.
+	 * have 3 rows and 4 columns. Each cell is a COVERED_CELL, with the exception of 
+	 * cells (0, 0) and (2, 1) where they are a MINE.
 	 */
 	public MineSweeperBoard() {
 		int[][] defaultBoard = createBoard(DEFAULT_LEVEL);
 		coverBoard(defaultBoard);
-		placeMines(defaultBoard, DEFAULT_LEVEL, DEFAULT_BOARD_NUM_MINES);
+		placeMines(defaultBoard, DEFAULT_BOARD_NUM_MINES);
 	}
 
 	/**
 	 * Construct a new MineSweeperBoard for play at the specified level. The size of
 	 * the board and the number of mines are determined by the level of play. Valid
-	 * levels of play are indicated by the constants BEGINNER_LEVEL,
-	 * INTERMEDIATE_LEVEL and EXPERT_LEVEL.
-	 * 
-	 * If an invalid level of play is specified, the new MineSweeperBoard should be
-	 * created at the BEGINNER_LEVEL. The size of the board and the number of cells
-	 * which contain mines is as follows:
+	 * levels of play, and their corresponding board size and number of mines are as follows:
 	 * 
 	 * <pre>
-	 * &lt;U&gt;
-	 * Level:              Board Size (RxC):   Mines:&lt;/U&gt;        
+	 * Level:              Board Size(RxC):   Mines:       
 	 * BEGINNER_LEVEL      5x10                3
 	 * INTERMEDIATE_LEVEL  10x15               15
 	 * EXPERT_LEVEL        15x20               45
@@ -134,48 +130,53 @@ public class MineSweeperBoard {
 		if (level == BEGINNER_LEVEL) {
 			int[][] beginnerBoard = createBoard(BEGINNER_LEVEL);
 			coverBoard(beginnerBoard);
-			placeMines(beginnerBoard, BEGINNER_LEVEL, BEGINNER_BOARD_NUM_MINES);
+			placeMines(beginnerBoard, BEGINNER_BOARD_NUM_MINES);
 		}
 
 		else if (level == INTERMEDIATE_LEVEL) {
 			int[][] intermedidateBoard = createBoard(INTERMEDIATE_LEVEL);
 			coverBoard(intermedidateBoard);
-			placeMines(intermedidateBoard, INTERMEDIATE_LEVEL, INTERMEDIATE_BOARD_NUM_MINES);
+			placeMines(intermedidateBoard, INTERMEDIATE_BOARD_NUM_MINES);
 		}
 
 		else if (level == EXPERT_LEVEL) {
 			int[][] expertBoard = createBoard(EXPERT_LEVEL);
 			coverBoard(expertBoard);
-			placeMines(expertBoard, EXPERT_LEVEL, EXPERT_BOARD_NUM_MINES);
+			placeMines(expertBoard, EXPERT_BOARD_NUM_MINES);
 		}
 	}
 
 	private int[][] createBoard(int level) {
+		Point[] mineLocations = null;
+
 		if (level == DEFAULT_LEVEL) {
 			msb = new int[DEFAULT_BOARD_ROWS][DEFAULT_BOARD_COLUMNS];
-			mineLocations = new String[DEFAULT_BOARD_NUM_MINES];
+			mineLocations = new Point[DEFAULT_BOARD_NUM_MINES];
 			numMines = DEFAULT_BOARD_NUM_MINES;
 		}
 
 		else if (level == BEGINNER_LEVEL) {
 			msb = new int[BEGINNER_BOARD_ROWS][BEGINNER_BOARD_COLUMNS];
-			mineLocations = new String[BEGINNER_BOARD_NUM_MINES];
+			mineLocations = new Point[BEGINNER_BOARD_NUM_MINES];
 			numMines = BEGINNER_BOARD_NUM_MINES;
 		}
 
 		else if (level == INTERMEDIATE_LEVEL) {
 			msb = new int[INTERMEDIATE_BOARD_ROWS][INTERMEDIATE_BOARD_COLUMNS];
-			mineLocations = new String[INTERMEDIATE_BOARD_NUM_MINES];
+			mineLocations = new Point[INTERMEDIATE_BOARD_NUM_MINES];
 			numMines = INTERMEDIATE_BOARD_NUM_MINES;
 		}
 
 		else if (level == EXPERT_LEVEL) {
 			msb = new int[EXPERT_BOARD_ROWS][EXPERT_BOARD_COLUMNS];
-			mineLocations = new String[EXPERT_BOARD_NUM_MINES];
+			mineLocations = new Point[EXPERT_BOARD_NUM_MINES];
 			numMines = EXPERT_BOARD_NUM_MINES;
 		}
 
 		difficultyLevel = level;
+
+		boardState = new HashMap<Integer, Point[]>();
+		boardState.put(MINE, mineLocations);
 
 		return msb;
 	}
@@ -188,12 +189,14 @@ public class MineSweeperBoard {
 		}
 	}
 
-	private void placeMines(int[][] board, int level, int numMinesToPlace) {
-		if (level == DEFAULT_LEVEL) {
+	private void placeMines(int[][] board, int numMinesToPlace) {
+		Point[] mineLocations = boardState.get(MINE);
+
+		if (difficultyLevel == DEFAULT_LEVEL) {
 			board[0][0] = MINE;
 			board[2][1] = MINE;
-			mineLocations[0] = "0,0";
-			mineLocations[1] = "2,1";
+			mineLocations[0] = new Point(0, 0);
+			mineLocations[1] = new Point(2, 1);
 		}
 
 		else {
@@ -203,27 +206,28 @@ public class MineSweeperBoard {
 			int mineYCoordinate = 0;
 
 			while (numMinesPlaced < numMinesToPlace) {
-				if (level == BEGINNER_LEVEL) {
+				if (difficultyLevel == BEGINNER_LEVEL) {
 					mineXCoordinate = rnd.nextInt(BEGINNER_BOARD_ROWS);
 					mineYCoordinate = rnd.nextInt(BEGINNER_BOARD_COLUMNS);
 				}
 
-				else if (level == INTERMEDIATE_LEVEL) {
+				else if (difficultyLevel == INTERMEDIATE_LEVEL) {
 					mineXCoordinate = rnd.nextInt(INTERMEDIATE_BOARD_ROWS);
 					mineYCoordinate = rnd.nextInt(INTERMEDIATE_BOARD_COLUMNS);
 				}
 
-				else if (level == EXPERT_LEVEL) {
+				else if (difficultyLevel == EXPERT_LEVEL) {
 					mineXCoordinate = rnd.nextInt(EXPERT_BOARD_ROWS);
 					mineYCoordinate = rnd.nextInt(EXPERT_BOARD_COLUMNS);
 				}
 
-				mineLocations[numMinesPlaced] = new String(
-						String.valueOf(mineXCoordinate) + "," + String.valueOf(mineYCoordinate));
-
 				// place mine if one didn't exist
 				if (board[mineXCoordinate][mineYCoordinate] == COVERED_CELL) {
 					board[mineXCoordinate][mineYCoordinate] = MINE;
+					
+					Point mineCoordinates = new Point(mineXCoordinate, mineYCoordinate);
+					//store mine coordinates
+					mineLocations[numMinesPlaced] = mineCoordinates;
 					numMinesPlaced++;
 				}
 			}
@@ -278,8 +282,8 @@ public class MineSweeperBoard {
 		return msb[row][col];
 	}
 
-	public String[] getMineLocations() {
-		return mineLocations;
+	public Point[] getMineLocations() {
+		return boardState.get(MINE);
 	}
 
 	/**
@@ -370,17 +374,17 @@ public class MineSweeperBoard {
 					msb[row][col] = FLAGGED_CELL;
 				}
 
+				// unflag a non-mine covered cell
+				else if (cell == FLAGGED_CELL) {
+					msb[row][col] = COVERED_CELL;
+				}
+
 				// flag a mine
 				else if (cell == MINE) {
 					msb[row][col] = FLAGGED_MINE;
 				}
 
-				// if the cell is already flagged, return it to a covered cell
-				else if (cell == FLAGGED_CELL) {
-					msb[row][col] = COVERED_CELL;
-				}
-
-				// return the flagged mine to a mine
+				// unflag a mine
 				else if (cell == FLAGGED_MINE) {
 					msb[row][col] = MINE;
 				}
@@ -430,13 +434,15 @@ public class MineSweeperBoard {
 	 * 
 	 * @return true if the current game has been won and false otherwise.
 	 */
-	public boolean gameWon() {
-		boolean gameWon = false;
-
+	public boolean hasWonGame() {
+		return areAllMinesFlagged() && areAllNonMineCellsUncovered();
+	}
+	
+	private boolean areAllNonMineCellsUncovered() {
 		for (int row = 0; row < msb.length; row++) {
 			for (int col = 0; col < msb[row].length; col++) {
 				int cell = getCell(row, col);
-
+	
 				if (cell == COVERED_CELL || cell == FLAGGED_CELL) {
 					return false;
 				}
@@ -444,9 +450,52 @@ public class MineSweeperBoard {
 		}
 
 		return true;
+	} 
+
+	private int getNumMinesFlagged() {
+		Point[] mineLocations = getMineLocations();
+		int numMinesFlagged = 0;
+		
+		for (Point mine : mineLocations) {
+			int mineXCoordinate = (int) mine.getX();
+			int mineYCoordinate = (int) mine.getY();
+			
+			if(getCell(mineXCoordinate, mineYCoordinate) == FLAGGED_MINE) {
+				numMinesFlagged++;
+			}
+		}
+
+		return numMinesFlagged;
 	}
 
-	private boolean allMinesFlagged() {
-		return false;
+	private boolean areAllMinesFlagged() {
+		int numMinesFlagged = getNumMinesFlagged();
+		boolean allMinesFlagged = false;
+		
+		if(difficultyLevel == DEFAULT_LEVEL) {
+			if(numMinesFlagged == DEFAULT_BOARD_NUM_MINES) {
+				allMinesFlagged = true;
+			}
+		}
+
+		else if(difficultyLevel == BEGINNER_LEVEL) {
+			if(numMinesFlagged == BEGINNER_BOARD_NUM_MINES) {
+				allMinesFlagged = true;
+			}
+		}
+
+		else if(difficultyLevel == INTERMEDIATE_LEVEL) {
+			if(numMinesFlagged == INTERMEDIATE_BOARD_NUM_MINES) {
+				allMinesFlagged = true;
+			}
+		}
+
+		else if(difficultyLevel == EXPERT_LEVEL) {
+			if(numMinesFlagged == EXPERT_BOARD_NUM_MINES) {
+				allMinesFlagged = true;
+			}
+		}
+
+		return allMinesFlagged;
 	}
 }

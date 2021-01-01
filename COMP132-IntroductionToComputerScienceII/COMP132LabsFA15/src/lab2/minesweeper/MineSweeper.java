@@ -36,8 +36,7 @@ public class MineSweeper {
         window = new JFrame("Minesweeper");
 
         // Handle closing the window.
-        // This is the old way but is is compatible with 
-        // old JDK's.
+        // This is the old way but is is compatible with old JDK's.
         window.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
@@ -62,7 +61,7 @@ public class MineSweeper {
 
     public static void gameWasWon() {
         endGame();
-        revealBoard();
+        revealGUIBoard();
         JOptionPane.showMessageDialog(window, "Way to go, you won!", "Winner!",
                 JOptionPane.INFORMATION_MESSAGE);
         menuHandler.resetMenus();
@@ -70,7 +69,7 @@ public class MineSweeper {
 
     public static void gameWasLost() {
         endGame();
-        revealBoard();
+        revealGUIBoard();
         JOptionPane.showMessageDialog(window, "Too bad, you lose!", "Looser!",
                 JOptionPane.INFORMATION_MESSAGE);
         menuHandler.resetMenus();
@@ -97,9 +96,9 @@ public class MineSweeper {
         return level;
     }
 
-    public static void revealBoard() {
+    public static void revealGUIBoard() {
         theBoard.revealBoard();
-        thePanel.revealBoard();
+        thePanel.revealPanel();
     }
 
     public static void makeNewBoard() {
@@ -257,7 +256,7 @@ public class MineSweeper {
                 gameMenu.getItem(1).setEnabled(false);
                 gameMenu.getItem(2).setEnabled(false);
                 MineSweeper.endGame();
-                MineSweeper.revealBoard();
+                MineSweeper.revealGUIBoard();
             }
             else if (e.getActionCommand().equals("Exit")) {
                 System.exit(0);
@@ -293,7 +292,7 @@ public class MineSweeper {
             }
         }
 
-        public void revealBoard() {
+        public void revealPanel() {
             // iterate through all of the components
             // turn them into MineSweeperButtons and
             // set their icons according to the board.
@@ -307,7 +306,7 @@ public class MineSweeper {
         public void mouseClicked(MouseEvent e) {
 
             try {
-                if (theBoard.hasUncoveredMine() || theBoard.gameWon()) {
+                if (theBoard.hasUncoveredMine() || theBoard.hasWonGame()) {
                     MineSweeper.reStartGameOnClick();
                 }
                 else {
@@ -345,7 +344,7 @@ public class MineSweeper {
 
                     repaint();
                     
-                    if (theBoard.gameWon()) {
+                    if (theBoard.hasWonGame()) {
                         MineSweeper.gameWasWon();
                     }
                     else if (theBoard.hasUncoveredMine()) {
