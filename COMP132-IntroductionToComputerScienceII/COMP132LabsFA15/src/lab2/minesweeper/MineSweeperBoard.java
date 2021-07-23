@@ -22,65 +22,44 @@ import java.util.Random;
  */
 public class MineSweeperBoard {
 
-	private int[][] msb;
-	private int difficultyLevel;
-	private int numMines;
-	private HashMap<Integer, HashSet<Point>> boardState;
-
-	/**
-	 * A constant value representing a covered cell. A covered cell is any cell
-	 * which does not contains a mine, has not been flagged and has not yet been
-	 * uncovered.
+	/*
+	 * A covered cell is any cell that does not contains a mine and 
+	 * has not been flagged and has not yet been uncovered
 	 */
 	protected static final int COVERED_CELL = -1;
 
-	/**
-	 * A constant value representing a cell that has not been uncovered yet but
-	 * contains a mine.
+	/*
+	 * A covered cell that that contains a mine
 	 */
-	protected static final int MINE = -2;
+	protected static final int COVERED_MINE = -2;
 
-	/**
-	 * A constant value representing a cell which does not contain a mine but has
-	 * had a flag placed on it.
+	/*
+	 * An uncovered cell containing a mine
 	 */
-	protected static final int FLAGGED_CELL = -3;
-
-	/**
-	 * A constant value representing a cell which contains a mine and has had a flag
-	 * placed on it.
+	protected static final int UNCOVERED_MINE = -3;
+	
+	/*
+	 * A non-mine cell with a flag placed on it
 	 */
-	protected static final int FLAGGED_MINE = -4;
+	protected static final int FLAGGED_CELL = -4;
 
-	/**
-	 * A constant value representing a cell containing a mine that has been
-	 * uncovered.
+	/*
+	 * A mine cell with a flag placed on it.
 	 */
-	protected static final int UNCOVERED_MINE = -5;
+	protected static final int FLAGGED_MINE = -5;
 
-	/**
-	 * A constant value representing the contents of an invalid cell. This value is
-	 * returned by the getCell method when an invalid cell is specified.
+	/*
+	 * Represents a cell that is not a valid position on the board
 	 */
 	protected static final int INVALID_CELL = -10;
 
+	/* Difficulty levels */
 	public static final int DEFAULT_LEVEL = 0;
-
-	/**
-	 * A constant value representing the easiest level of play.
-	 */
 	public static final int BEGINNER_LEVEL = 1;
-
-	/**
-	 * A constant value representing an intermediate level of play.
-	 */
 	public static final int INTERMEDIATE_LEVEL = 2;
-
-	/**
-	 * A constant value representing the hardest level of play.
-	 */
 	public static final int EXPERT_LEVEL = 3;
-
+	
+	/* Board sizes for each difficulty level */
 	protected static final int DEFAULT_BOARD_ROWS = 3;
 	protected static final int DEFAULT_BOARD_COLUMNS = 4;
 
@@ -92,16 +71,22 @@ public class MineSweeperBoard {
 
 	protected static final int EXPERT_BOARD_ROWS = 15;
 	protected static final int EXPERT_BOARD_COLUMNS = 20;
-
+	
+	/* Mine count for each difficulty level */
 	protected static final int DEFAULT_BOARD_NUM_MINES = 2;
 	protected static final int BEGINNER_BOARD_NUM_MINES = 3;
 	protected static final int INTERMEDIATE_BOARD_NUM_MINES = 15;
 	protected static final int EXPERT_BOARD_NUM_MINES = 45;
+	
+	private int[][] msb;
+	private int difficultyLevel;
+	private int numMines;
+	private HashMap<Integer, HashSet<Point>> boardState;
 
 	/**
 	 * Construct a new fixed MineSweeperBoard for testing purposes. The board should
 	 * have 3 rows and 4 columns. Each cell is a COVERED_CELL, with the exception of 
-	 * cells (0, 0) and (2, 1) where they are a MINE.
+	 * cells (0, 0) and (2, 1) where they are a COVERED_MINE.
 	 */
 	public MineSweeperBoard() {
 		int[][] defaultBoard = createBoard(DEFAULT_LEVEL);
@@ -115,10 +100,10 @@ public class MineSweeperBoard {
 	 * levels of play, and their corresponding board size and number of mines are as follows:
 	 * 
 	 * <pre>
-	 * Level:              Board Size(RxC):   Mines:       
-	 * BEGINNER_LEVEL      5x10                3
-	 * INTERMEDIATE_LEVEL  10x15               15
-	 * EXPERT_LEVEL        15x20               45
+	 * Level              	Board Size   	Mines       
+	 * BEGINNER_LEVEL      	5x10            3
+	 * INTERMEDIATE_LEVEL  	10x15           15
+	 * EXPERT_LEVEL        	15x20           45
 	 * </pre>
 	 * 
 	 * @param level the level of play.
@@ -171,7 +156,7 @@ public class MineSweeperBoard {
 		difficultyLevel = level;
 		
 		boardState = new HashMap<Integer, HashSet<Point>>();
-		boardState.put(MINE, new HashSet<Point>());
+		boardState.put(COVERED_MINE, new HashSet<Point>());
 
 		return msb;
 	}
@@ -185,11 +170,11 @@ public class MineSweeperBoard {
 	}
 
 	private void placeMines(int[][] board, int numMinesToPlace) {
-		HashSet<Point> mineLocations = boardState.get(MINE);
+		HashSet<Point> mineLocations = boardState.get(COVERED_MINE);
 
 		if (difficultyLevel == DEFAULT_LEVEL) {
-			board[0][0] = MINE;
-			board[2][1] = MINE;
+			board[0][0] = COVERED_MINE;
+			board[2][1] = COVERED_MINE;
 			mineLocations.add(new Point(0, 0));
 			mineLocations.add(new Point(2, 1));	
 		}
@@ -218,7 +203,7 @@ public class MineSweeperBoard {
 
 				// place mine if one didn't exist
 				if (board[mineXCoordinate][mineYCoordinate] == COVERED_CELL) {
-					board[mineXCoordinate][mineYCoordinate] = MINE;
+					board[mineXCoordinate][mineYCoordinate] = COVERED_MINE;
 					
 					//store mine coordinates
 					Point mine = new Point(mineXCoordinate, mineYCoordinate);
@@ -271,7 +256,7 @@ public class MineSweeperBoard {
 	 */
 	public int getCell(int row, int col) {
 		// checking indices that exceed the board's dimensions
-		if (row < 0 || col < 0 || row > (getNumRows() - 1) || col > (getNumColumns() - 1)) {
+		if (row < 0 || col < 0 || row > getNumRows() || col > (getNumColumns() - 1)) {
 			return INVALID_CELL;
 		}
 
@@ -279,7 +264,7 @@ public class MineSweeperBoard {
 	}
 
 	public HashSet<Point> getMineLocations() {
-		return boardState.get(MINE);
+		return boardState.get(COVERED_MINE);
 	}
 
 	/**
@@ -305,10 +290,12 @@ public class MineSweeperBoard {
 
 				// only examine valid cells
 				if (examinedCell != INVALID_CELL) {
-					if (examinedCell == MINE || examinedCell == FLAGGED_MINE || examinedCell == UNCOVERED_MINE) {
-						// don't increment mine count if the cell being examined is a mine
-						// only consider adjacent mines
-						// mine @ (row, col) does not contribute to the count
+					if (examinedCell == COVERED_MINE || examinedCell == FLAGGED_MINE || examinedCell == UNCOVERED_MINE) {
+						/*
+						 * Only consider adjacent mines such that mines @ do not contribute to the count;
+						 * using OR instead of AND since both X & Y coordinates need to match the mine @ (row, col) 
+						 * so it's not included in mine count
+						 */
 						if (examinedXCoordinate != row || examinedYCoordinate != col) {
 							numAdjacentMines++;
 						}
@@ -337,7 +324,7 @@ public class MineSweeperBoard {
 		// only check cells that have not been uncovered
 		if (cell >= 0 || cell != UNCOVERED_MINE) {
 			if (cell != INVALID_CELL || cell != FLAGGED_CELL || cell != FLAGGED_MINE) {
-				if (cell == MINE) {
+				if (cell == COVERED_MINE) {
 
 					msb[row][col] = UNCOVERED_MINE;
 				}
@@ -376,13 +363,13 @@ public class MineSweeperBoard {
 				}
 
 				// flag a mine
-				else if (cell == MINE) {
+				else if (cell == COVERED_MINE) {
 					msb[row][col] = FLAGGED_MINE;
 				}
 
 				// unflag a mine
 				else if (cell == FLAGGED_MINE) {
-					msb[row][col] = MINE;
+					msb[row][col] = COVERED_MINE;
 				}
 			}
 		}

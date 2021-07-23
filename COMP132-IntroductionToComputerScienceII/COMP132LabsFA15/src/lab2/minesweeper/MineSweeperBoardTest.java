@@ -20,7 +20,6 @@ public class MineSweeperBoardTest {
 
 	@After
 	public void tearDown() {
-
 	}
 
 	@Test
@@ -100,21 +99,14 @@ public class MineSweeperBoardTest {
 
 	@Test
 	public void testGetCellValidCell() {
-		assertEquals(MineSweeperBoard.MINE, msb.getCell(0, 0));
+		assertEquals(MineSweeperBoard.COVERED_MINE, msb.getCell(0, 0));
 		assertEquals(MineSweeperBoard.COVERED_CELL, msb.getCell(2, 3));
 	}
 
 	@Test
-	public void testNumAdjacentMinesRegularCells() {
-		assertEquals(2, msb.getNumAdjacentMines(1, 1));
-		assertEquals(1, msb.getNumAdjacentMines(1, 2));
-		assertEquals(0, msb.getNumAdjacentMines(1, 3));
-	}
-
-	@Test
 	public void testNumAdjacentMinesFlaggedMines() {
-		assertEquals(MineSweeperBoard.MINE, msb.getCell(0, 0));
-		assertEquals(MineSweeperBoard.MINE, msb.getCell(2, 1));
+		assertEquals(MineSweeperBoard.COVERED_MINE, msb.getCell(0, 0));
+		assertEquals(MineSweeperBoard.COVERED_MINE, msb.getCell(2, 1));
 
 		msb.flagCell(0, 0);
 		msb.flagCell(2, 1);
@@ -129,8 +121,8 @@ public class MineSweeperBoardTest {
 
 	@Test
 	public void testNumAdjacentMinesUncoveredMines() {
-		assertEquals(MineSweeperBoard.MINE, msb.getCell(0, 0));
-		assertEquals(MineSweeperBoard.MINE, msb.getCell(2, 1));
+		assertEquals(MineSweeperBoard.COVERED_MINE, msb.getCell(0, 0));
+		assertEquals(MineSweeperBoard.COVERED_MINE, msb.getCell(2, 1));
 
 		msb.uncoverCell(0, 0);
 		msb.uncoverCell(2, 1);
@@ -157,7 +149,7 @@ public class MineSweeperBoardTest {
 
 	@Test
 	public void testUncoverCellMines() {
-		assertEquals(MineSweeperBoard.MINE, msb.getCell(0, 0));
+		assertEquals(MineSweeperBoard.COVERED_MINE, msb.getCell(0, 0));
 		msb.uncoverCell(0, 0);
 		assertEquals(MineSweeperBoard.UNCOVERED_MINE, msb.getCell(0, 0));
 		assertEquals(0, msb.getNumAdjacentMines(0, 0));
@@ -180,19 +172,19 @@ public class MineSweeperBoardTest {
 		assertEquals(MineSweeperBoard.COVERED_CELL, msb.getCell(0, 3));
 
 		// flagging a mine
-		assertEquals(MineSweeperBoard.MINE, msb.getCell(2, 1));
+		assertEquals(MineSweeperBoard.COVERED_MINE, msb.getCell(2, 1));
 		msb.flagCell(2, 1);
 		assertEquals(MineSweeperBoard.FLAGGED_MINE, msb.getCell(2, 1));
 
 		// unflagging a mine
 		msb.flagCell(2, 1);
-		assertEquals(MineSweeperBoard.MINE, msb.getCell(2, 1));
+		assertEquals(MineSweeperBoard.COVERED_MINE, msb.getCell(2, 1));
 	}
 
 	@Test
 	public void testFlagCellUncoveredCells() {
 		// uncover a mine
-		assertEquals(MineSweeperBoard.MINE, msb.getCell(0, 0));
+		assertEquals(MineSweeperBoard.COVERED_MINE, msb.getCell(0, 0));
 		msb.uncoverCell(0, 0);
 		assertEquals(MineSweeperBoard.UNCOVERED_MINE, msb.getCell(0, 0));
 

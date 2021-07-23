@@ -423,7 +423,7 @@ public class MineSweeper {
             case MineSweeperBoard.COVERED_CELL:
                 curIcon = EMPTY_ICON;
                 break;
-            case MineSweeperBoard.MINE:
+            case MineSweeperBoard.COVERED_MINE:
                 curIcon = EMPTY_ICON;
                 break;
             case MineSweeperBoard.FLAGGED_CELL:
@@ -452,7 +452,7 @@ public class MineSweeper {
             case MineSweeperBoard.COVERED_CELL:
                 curIcon = EMPTY_ICON;
                 break;
-            case MineSweeperBoard.MINE:
+            case MineSweeperBoard.COVERED_MINE:
                 curIcon = MINE_ICON;
                 break;
             case MineSweeperBoard.FLAGGED_CELL:
