@@ -256,7 +256,7 @@ public class MineSweeperBoard {
 	 */
 	public int getCell(int row, int col) {
 		// checking indices that exceed the board's dimensions
-		if (row < 0 || col < 0 || row > getNumRows() || col > (getNumColumns() - 1)) {
+		if (row < 0 || col < 0 || row > getNumRows() - 1 || col > (getNumColumns() - 1)) {
 			return INVALID_CELL;
 		}
 
