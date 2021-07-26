@@ -238,7 +238,7 @@ public class MineSweeperBoardTest {
 	}
 
 	private void testMineLocations(MineSweeperBoard msb, int level) {
-		HashSet<Point> mineLocations = msb.getMineLocations();
+		HashSet<Point> mineLocations = msb.getLocations(MineSweeperBoard.COVERED_MINE);
 		
 		if (level == MineSweeperBoard.DEFAULT_LEVEL) {
 			assertEquals(true, mineLocations.contains(new Point(0, 0)));

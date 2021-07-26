@@ -156,15 +156,22 @@ public class MineSweeperBoard {
 		difficultyLevel = level;
 		
 		boardState = new HashMap<Integer, HashSet<Point>>();
+		boardState.put(COVERED_CELL, new HashSet<Point>());
 		boardState.put(COVERED_MINE, new HashSet<Point>());
+		boardState.put(UNCOVERED_MINE, new HashSet<Point>());
+		boardState.put(FLAGGED_CELL, new HashSet<Point>());
+		boardState.put(FLAGGED_MINE, new HashSet<Point>());
 
 		return msb;
 	}
 
 	private void coverBoard(int[][] board) {
+		HashSet<Point> coveredCellLocations = boardState.get(COVERED_CELL);
+
 		for (int row = 0; row < board.length; row++) {
 			for (int col = 0; col < board[row].length; col++) {
 				board[row][col] = COVERED_CELL;
+				coveredCellLocations.add(new Point(row, col));
 			}
 		}
 	}
@@ -263,8 +270,21 @@ public class MineSweeperBoard {
 		return msb[row][col];
 	}
 
-	public HashSet<Point> getMineLocations() {
-		return boardState.get(COVERED_MINE);
+	public HashSet<Point> getLocations(int cellType) {
+		switch (cellType) {
+			case COVERED_CELL:
+				return boardState.get(COVERED_CELL);
+			case COVERED_MINE:
+				return boardState.get(COVERED_MINE);
+			case UNCOVERED_MINE:
+				return boardState.get(UNCOVERED_MINE);
+			case FLAGGED_CELL:
+				return boardState.get(FLAGGED_CELL);
+			case FLAGGED_MINE:
+				return boardState.get(FLAGGED_MINE);
+			default:
+				return null;
+		}
 	}
 
 	/**
@@ -320,13 +340,14 @@ public class MineSweeperBoard {
 	 */
 	public void uncoverCell(int row, int col) {
 		int cell = getCell(row, col);
+		HashSet<Point> uncoveredMineLocations = boardState.get(UNCOVERED_MINE);
 
 		// only check cells that have not been uncovered
 		if (cell >= 0 || cell != UNCOVERED_MINE) {
 			if (cell != INVALID_CELL || cell != FLAGGED_CELL || cell != FLAGGED_MINE) {
 				if (cell == COVERED_MINE) {
-
 					msb[row][col] = UNCOVERED_MINE;
+					uncoveredMineLocations.add(new Point(row, col));
 				}
 
 				// mark the cell with number of adjacent mines
@@ -352,24 +373,32 @@ public class MineSweeperBoard {
 		// only check cells that have not been uncovered
 		if (cell >= 0 || cell != UNCOVERED_MINE) {
 			if (cell != INVALID_CELL) {
+				HashSet<Point> flaggedCellLocations = boardState.get(FLAGGED_CELL);
+				HashSet<Point> flaggedMineLocations = boardState.get(FLAGGED_MINE);
+				Point point = new Point(row, col);
+
 				// flag non-mine covered cell
 				if (cell == COVERED_CELL) {
 					msb[row][col] = FLAGGED_CELL;
+					flaggedCellLocations.add(point);
 				}
 
 				// unflag a non-mine covered cell
 				else if (cell == FLAGGED_CELL) {
 					msb[row][col] = COVERED_CELL;
+					flaggedCellLocations.remove(point);
 				}
 
 				// flag a mine
 				else if (cell == COVERED_MINE) {
 					msb[row][col] = FLAGGED_MINE;
+					flaggedMineLocations.add(point);
 				}
 
 				// unflag a mine
 				else if (cell == FLAGGED_MINE) {
 					msb[row][col] = COVERED_MINE;
+					flaggedMineLocations.remove(point);
 				}
 			}
 		}
@@ -393,17 +422,7 @@ public class MineSweeperBoard {
 	 * @return true if the current game has been lost and false otherwise.
 	 */
 	public boolean hasUncoveredMine() {
-		boolean uncoveredMine = false;
-
-		for (int row = 0; row < msb.length; row++) {
-			for (int col = 0; col < msb[row].length; col++) {
-				if (msb[row][col] == UNCOVERED_MINE) {
-					return true;
-				}
-			}
-		}
-
-		return uncoveredMine;
+		return boardState.get(UNCOVERED_MINE).size() > 0;
 	}
 
 	/**
@@ -418,7 +437,7 @@ public class MineSweeperBoard {
 	 * @return true if the current game has been won and false otherwise.
 	 */
 	public boolean hasWonGame() {
-		return areAllMinesFlagged(getMineLocations()) && areAllNonMineCellsUncovered();
+		return areAllMinesFlagged(boardState.get(UNCOVERED_MINE)) && areAllNonMineCellsUncovered();
 	}
 
 	// TODO: finish implementation
@@ -490,4 +509,5 @@ public class MineSweeperBoard {
 
 		return allMinesFlagged;
 	}
+
 }
